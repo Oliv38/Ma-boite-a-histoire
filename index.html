@@ -997,7 +997,7 @@ const fmt=t=>Math.floor(t/60)+":"+String(Math.floor(t%60)).padStart(2,"0");
 function statusLine(mins){
  const who=current&&C[current.char]?C[current.char].n:"";
  if(queue)return "Soirée · histoire "+(qi+1)+" sur "+queue.length+" · "+who;
- return who+(mins?" · environ "+mins+" min":" · lecture en cours");
+ return "";
 }
 function buildQueue(target=15){
  let pool=LIB.filter(s=>AUDIO.has(s.id)&&match(s));
