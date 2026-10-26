@@ -11,7 +11,7 @@ Option conseillée : Cloudflare Pages (gratuit, glisser-déposer)
   3. Donner un nom au projet (ex. ma-boite-a-histoires), puis déposer ce dossier
      (ou le fichier zip) et cliquer « Deploy site ».
   4. Le site est en ligne sur https://<nom-du-projet>.pages.dev
-  Limites Cloudflare : 1 000 fichiers maximum, 25 Mo par fichier (ici : 162 fichiers, le plus gros fait moins de 4 Mo).
+  Limites Cloudflare : 1 000 fichiers maximum, 25 Mo par fichier (ici : 167 fichiers, le plus gros fait moins de 4 Mo).
 
 Autre option : GitHub Pages
   Créer un dépôt public, y envoyer index.html et le dossier audio/,
