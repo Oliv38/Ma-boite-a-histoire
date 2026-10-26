@@ -39,6 +39,8 @@ h1{font-family:var(--display);font-weight:700;letter-spacing:-.01em;font-variati
 .tabs{display:flex;gap:6px;margin:22px 0 18px;background:var(--night-2);padding:5px;border-radius:999px;width:max-content;max-width:100%}
 .tab{font:700 1rem var(--display);border:0;background:transparent;color:var(--muted);padding:8px 18px;border-radius:999px;cursor:pointer}
 .tab[aria-selected="true"]{background:var(--lamp);color:var(--night)}
+.tab:disabled{opacity:.45;cursor:not-allowed;filter:grayscale(1)}
+.prem.soon-badge{background:var(--night-3);color:var(--moon)}
 button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid var(--lamp-soft);outline-offset:2px}
 .filters{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px;align-items:center}
 .chip{font:600 .92rem var(--body);border:2px solid var(--night-3);background:transparent;color:var(--moon);padding:6px 14px;border-radius:999px;cursor:pointer}
@@ -173,7 +175,7 @@ select{font:inherit;background:var(--night);color:var(--moon);border:2px solid v
 
   <div class="tabs" role="tablist">
     <button class="tab" role="tab" id="t-lib" aria-selected="true">Bibliothèque</button>
-    <button class="tab" role="tab" id="t-new" aria-selected="false">Inventer une histoire <span class="prem">Premium</span></button>
+    <button class="tab" role="tab" id="t-new" aria-selected="false" disabled aria-disabled="true" title="Bientôt disponible">Inventer une histoire <span class="prem soon-badge">Bientôt disponible</span></button>
   </div>
 
   <section id="v-lib">
