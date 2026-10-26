@@ -1,0 +1,24 @@
+MA BOÎTE À HISTOIRES — mettre le site en ligne
+
+Contenu
+  index.html   l'application
+  audio/       les histoires lues (un MP3 par histoire)
+
+Option conseillée : Cloudflare Pages (gratuit, glisser-déposer)
+  1. Créer un compte sur dash.cloudflare.com
+  2. Menu « Workers & Pages » > « Create application » > « Get started »
+     > « Drag and drop your files »
+  3. Donner un nom au projet (ex. ma-boite-a-histoires), puis déposer ce dossier
+     (ou le fichier zip) et cliquer « Deploy site ».
+  4. Le site est en ligne sur https://<nom-du-projet>.pages.dev
+  Limites Cloudflare : 1 000 fichiers maximum, 25 Mo par fichier (ici : 157 fichiers, le plus gros fait moins de 4 Mo).
+
+Autre option : GitHub Pages
+  Créer un dépôt public, y envoyer index.html et le dossier audio/,
+  puis Settings > Pages > « Deploy from a branch » (main, dossier racine).
+  Attention : GitHub interdit d'y héberger un service commercial (abonnement payant).
+
+Sur iPhone : ouvrir le site dans Safari, bouton Partager > « Sur l'écran d'accueil ».
+
+Premium (création d'histoires par l'IA) : désactivé sur cette version publique.
+Il demande un serveur qui appelle l'IA avec une clé privée.
