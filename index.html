@@ -168,6 +168,10 @@ input[type=text]{width:100%;font:inherit;padding:10px 14px;border-radius:12px;bo
 .player .ctrls,.player #showtxt{display:none!important}
 .text[hidden]{display:none!important}
 .p-top{display:flex;justify-content:space-between;align-items:center}
+.p-count{display:flex;align-items:center;gap:4px;background:color-mix(in srgb,var(--moon) 8%,transparent);border-radius:999px;padding:3px}
+.p-count button{width:40px;height:40px;border-radius:50%;border:0;background:transparent;color:var(--lamp-soft);font:800 1.5rem/1 var(--body);cursor:pointer;display:grid;place-items:center;padding:0}
+.p-count button:disabled{opacity:.3;cursor:default}
+.p-count span{min-width:1.6ch;text-align:center;font:800 1.2rem var(--display);color:var(--lamp)}
 .p-ghost{width:44px;height:44px;border-radius:999px;border:0;background:color-mix(in srgb,var(--moon) 7%,transparent);color:var(--muted);cursor:pointer;display:grid;place-items:center}
 .p-ghost svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round}
 .p-stage{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;text-align:center;min-height:0}
@@ -290,7 +294,6 @@ select{font:inherit;background:var(--night);color:var(--moon);border:2px solid v
 </button>
 <button class="shuffle soiree" id="soiree" aria-label="Soirée : enchaîner des histoires pendant environ 15 minutes">
   <svg class="sh-play" viewBox="0 0 24 24" aria-hidden="true" style="margin:0"><path d="M14.5 3.2a8.8 8.8 0 1 0 6.3 12.3 7 7 0 0 1-6.3-12.3z"/></svg>
-  <span class="sh-badge" aria-hidden="true" style="font:800 .62rem/1 var(--body);color:var(--lamp-soft)">15</span>
 </button>
 <div class="herosheet" id="herosheet" hidden>
   <div class="hs-in">
@@ -313,6 +316,7 @@ select{font:inherit;background:var(--night);color:var(--moon);border:2px solid v
   <div class="nightfall" aria-hidden="true"></div>
   <div class="p-top">
     <button class="p-ghost" id="stop" aria-label="Fermer le lecteur (maintenir appuyé)"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg><svg class="hold" viewBox="0 0 44 44" aria-hidden="true"><circle cx="22" cy="22" r="20"/></svg></button>
+    <div class="p-count" role="group" aria-label="Nombre d'histoires à écouter"><button id="cminus" aria-label="Une histoire de moins">−</button><span id="cnum" aria-live="polite">1</span><button id="cplus" aria-label="Une histoire de plus">+</button></div>
     <button class="pfav p-ghost" id="pfav" aria-pressed="false"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20.5s-7.5-4.6-9.3-9.2C1.4 8 3.4 4.5 6.9 4.5c2.1 0 3.6 1.2 5.1 3 1.5-1.8 3-3 5.1-3 3.5 0 5.5 3.5 4.2 6.8-1.8 4.6-9.3 9.2-9.3 9.2z"/></svg></button>
   </div>
   <p class="p-lock" id="plock" aria-live="polite">Maintiens ✕ appuyé pour fermer</p>
@@ -930,7 +934,7 @@ if(synth){loadVoices();synth.onvoiceschanged=loadVoices}
 
 function showPlayer(s,status){
  stop(false);
- $("player").hidden=false;document.body.style.overflow="hidden";$("pemoji").innerHTML=ILLUS.has(s.id)?`<img src="illus/${s.id}.webp" alt="">`:(C[s.char]?hico(s.char):"");$("pmoon").classList.toggle("has-img",ILLUS.has(s.id));$("ptitle").textContent=s.title;syncPlayerFav();wake();$("pstat").classList.remove("err");$("pstat").textContent=status||"";
+ $("player").hidden=false;document.body.style.overflow="hidden";$("pemoji").innerHTML=ILLUS.has(s.id)?`<img src="illus/${s.id}.webp" alt="">`:(C[s.char]?hico(s.char):"");$("pmoon").classList.toggle("has-img",ILLUS.has(s.id));$("ptitle").textContent=s.title;syncPlayerFav();updCount();wake();$("pstat").classList.remove("err");$("pstat").textContent=status||"";
  $("text").replaceChildren();$("bar").style.width="0";
 }
 function showText(t){
@@ -1009,6 +1013,15 @@ function buildQueue(target=15){
  for(const s of pool){if(tot>=target||q.length>=5)break;if(tot+s.dur>target+3&&q.length)continue;q.push(s);tot+=s.dur}
  return q;
 }
+function updCount(){const n=queue?queue.length-qi:1;$("cnum").textContent=n;$("cminus").disabled=n<=1;$("cplus").disabled=n>=9}
+function pickMore(){
+ const used=new Set((queue||[current]).map(s=>s.id));
+ let pool=LIB.filter(s=>AUDIO.has(s.id)&&!used.has(s.id)&&match(s));
+ if(!pool.length)pool=LIB.filter(s=>AUDIO.has(s.id)&&!used.has(s.id));
+ return pool.length?pool[Math.floor(Math.random()*pool.length)]:null;
+}
+$("cplus").onclick=()=>{if(!current)return;if(!queue){queue=[current];qi=0}const s=pickMore();if(s)queue.push(s);updCount()};
+$("cminus").onclick=()=>{if(!queue||queue.length-qi<=1)return;queue.pop();updCount()};
 $("soiree").onclick=()=>{queue=buildQueue();qi=0;if(queue.length)open(queue[0])};
 function afterStory(){
  if(queue&&qi<queue.length-1){
