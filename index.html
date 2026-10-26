@@ -176,6 +176,7 @@ input[type=text]{width:100%;font:inherit;padding:10px 14px;border-radius:12px;bo
 @keyframes breathe{0%,100%{transform:scale(1);filter:brightness(.9)}50%{transform:scale(1.05);filter:brightness(1.08)}}
 .ptitle{font:800 clamp(1.4rem,5.5vw,2rem)/1.15 var(--display);margin:0;color:var(--lamp-soft);text-wrap:balance;max-width:22ch}
 .pstat{color:var(--muted);font-size:.95rem;margin:0}
+.pstat:not(.err){display:none}
 .pbtn{width:88px;height:88px;flex:none;border-radius:50%;border:0;background:var(--lamp);color:var(--night);cursor:pointer;display:grid;place-items:center;margin-top:22px;box-shadow:0 0 0 10px color-mix(in srgb,var(--lamp) 12%,transparent)}
 .pbtn svg{width:36px;height:36px;fill:currentColor}
 .p-bottom{max-width:520px;width:100%;margin:0 auto;display:grid;gap:10px}
@@ -929,7 +930,7 @@ if(synth){loadVoices();synth.onvoiceschanged=loadVoices}
 
 function showPlayer(s,status){
  stop(false);
- $("player").hidden=false;document.body.style.overflow="hidden";$("pemoji").innerHTML=ILLUS.has(s.id)?`<img src="illus/${s.id}.webp" alt="">`:(C[s.char]?hico(s.char):"");$("pmoon").classList.toggle("has-img",ILLUS.has(s.id));$("ptitle").textContent=s.title;syncPlayerFav();wake();$("pstat").textContent=status||"";
+ $("player").hidden=false;document.body.style.overflow="hidden";$("pemoji").innerHTML=ILLUS.has(s.id)?`<img src="illus/${s.id}.webp" alt="">`:(C[s.char]?hico(s.char):"");$("pmoon").classList.toggle("has-img",ILLUS.has(s.id));$("ptitle").textContent=s.title;syncPlayerFav();wake();$("pstat").classList.remove("err");$("pstat").textContent=status||"";
  $("text").replaceChildren();$("bar").style.width="0";
 }
 function showText(t){
@@ -973,7 +974,7 @@ function speakNext(){
 let curU=null, started=false, watchdog=0;
 function noSound(why){
  playing=false;gen++;setIcon();synth&&synth.cancel();
- $("pstat").textContent=why+" Le texte est affiché ci-dessous.";
+ $("pstat").classList.add("err");$("pstat").textContent=why+" Le texte est affiché ci-dessous.";
  $("text").hidden=false;$("ctrls").hidden=false;$("showtxt").setAttribute("aria-pressed",true);
 }
 function play(){
