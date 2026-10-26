@@ -179,8 +179,9 @@ input[type=text]{width:100%;font:inherit;padding:10px 14px;border-radius:12px;bo
 .pbtn{width:88px;height:88px;flex:none;border-radius:50%;border:0;background:var(--lamp);color:var(--night);cursor:pointer;display:grid;place-items:center;margin-top:22px;box-shadow:0 0 0 10px color-mix(in srgb,var(--lamp) 12%,transparent)}
 .pbtn svg{width:36px;height:36px;fill:currentColor}
 .p-bottom{max-width:520px;width:100%;margin:0 auto;display:grid;gap:10px}
-.bar{height:6px;cursor:pointer;background:color-mix(in srgb,var(--moon) 10%,transparent);border-radius:6px;overflow:hidden}
-.bar i{display:block;height:100%;width:0;background:var(--lamp);transition:width .3s}
+.bar{height:8px;position:relative;z-index:3;touch-action:none;cursor:pointer;background:color-mix(in srgb,var(--moon) 10%,transparent);border-radius:6px}
+.bar::before{content:"";position:absolute;left:0;right:0;top:-18px;bottom:-18px}
+.bar i{display:block;border-radius:6px;height:100%;width:0;background:var(--lamp);transition:width .3s}
 .p-hint{margin:0;text-align:center;font-size:.8rem;color:var(--muted);opacity:0;transition:opacity .6s}
 /* Mode calme : après quelques secondes, tout s'estompe sauf la lune */
 .p-top,.p-stage>:not(.p-moon),.p-bottom .bar{transition:opacity 1.2s}
@@ -895,7 +896,7 @@ function startAudio(s){
  audio.play().catch(()=>{mode="speech";$("voice").hidden=false;$("voice").previousElementSibling.hidden=false;playing=false;play()});
 }
 audio.ontimeupdate=()=>{
- if(mode!=="audio"||!audio.duration)return;
+ if(mode!=="audio"||!audio.duration||seeking)return;
  const f=audio.currentTime/audio.duration, rem=audio.duration-audio.currentTime;
  // Fondu sonore sur les dernières secondes de la dernière histoire
  audio.volume=(!queue||qi>=queue.length-1)&&rem<6?Math.max(0,rem/6):1;
@@ -1016,6 +1017,18 @@ function afterStory(){
  $("pstat").textContent="Fin. Bonne nuit !";
  if(queue){queue=null;$("player").classList.add("calm","night")}
 }
+/* Barre de progression : toucher ou glisser pour avancer / reculer */
+let seeking=false;
+function barFrac(e){const r=$("bar").parentElement.getBoundingClientRect();return Math.min(1,Math.max(0,(e.clientX-r.left)/r.width))}
+function seekTo(f){
+ if(mode==="audio"){if(audio.duration){audio.currentTime=f*audio.duration;$("bar").style.width=(f*100)+"%"}}
+ else if(sentences.length){idx=Math.min(sentences.length-1,Math.floor(f*sentences.length));gen++;synth&&synth.cancel();$("bar").style.width=(f*100)+"%";if(playing)speakNext();else{[...$("text").children].forEach(x=>x.classList.toggle("on",+x.dataset.i===idx))}}
+}
+const barEl=$("bar").parentElement;
+barEl.addEventListener("pointerdown",e=>{if($("player").classList.contains("calm"))return;seeking=true;barEl.setPointerCapture(e.pointerId);$("bar").style.transition="none";$("bar").style.width=(barFrac(e)*100)+"%"});
+barEl.addEventListener("pointermove",e=>{if(seeking)$("bar").style.width=(barFrac(e)*100)+"%"});
+const barEnd=e=>{if(!seeking)return;seeking=false;$("bar").style.transition="";seekTo(barFrac(e))};
+barEl.addEventListener("pointerup",barEnd);barEl.addEventListener("pointercancel",()=>{seeking=false;$("bar").style.transition=""});
 /* Verrou parent : il faut maintenir ✕ une seconde pour fermer le lecteur */
 let holdT=0, hintT=0;
 function holdStart(e){e.preventDefault();$("stop").classList.add("holding");holdT=setTimeout(()=>{$("stop").classList.remove("holding");queue=null;stop(true)},1000)}
