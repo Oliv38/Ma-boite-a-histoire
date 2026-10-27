@@ -356,8 +356,7 @@ html:has(.player:not([hidden])){background:var(--deep)}
   </section>
   <section class="set-sec"><h3>Historique d'écoute</h3>
    <p class="set-info" id="set-heard"></p>
-   <div class="set-row"><span class="l">« Déjà écoutées »</span><button class="set-btn" id="clr-heard">Effacer</button></div>
-   <div class="set-row"><span class="l">Reprises de lecture</span><button class="set-btn" id="clr-pos">Effacer</button></div>
+   <div class="set-row"><span class="l">Tout remettre en « non lu »</span><button class="set-btn" id="clr-heard">Effacer</button></div>
   </section>
   <section class="set-sec"><h3>Affichage</h3>
    <div class="set-row"><label for="set-hcols">Icônes du filtre héros</label><select class="set-sel" id="set-hcols"><option value="3">Petites (3 par ligne)</option><option value="2">Grosses (2 par ligne)</option></select></div>
@@ -865,9 +864,10 @@ function card(s){
 /* Reprise : position de lecture par histoire (gardée dans ce navigateur) */
 let HEARD=new Set(store.get("mbh-heard",[]));
 function markHeard(id){if(HEARD.has(id))return;HEARD.add(id);store.set("mbh-heard",[...HEARD])}
-let POS=store.get("mbh-pos",{});
+let POS={}; // reprises : en mémoire seulement (perdues à la fermeture de l'app)
+try{localStorage.removeItem("mbh-pos")}catch(e){}
 const getPos=id=>POS[id]||null;
-function savePos(id,v){if(v)POS[id]=v;else delete POS[id];store.set("mbh-pos",POS)}
+function savePos(id,v){if(v)POS[id]=v;else delete POS[id]}
 /* Favoris (gardés dans ce navigateur) */
 let favs=new Set(store.get("mbh-favs",[])), favOnly=false;
 let heroes=new Set(), themes=new Set();
@@ -1226,7 +1226,7 @@ document.querySelector(".logo").addEventListener("click",()=>{const t=Date.now()
 function arm(btn,label,fn){let t=0;const base=btn.textContent;btn.onclick=()=>{if(t){clearTimeout(t);t=0;btn.classList.remove("arm");btn.textContent=base;fn();return}btn.classList.add("arm");btn.textContent=label;t=setTimeout(()=>{t=0;btn.classList.remove("arm");btn.textContent=base},3000)}}
 function refreshSettings(){
  const heard=[...HEARD].filter(id=>LIB.some(s=>s.id===id)).length;
- $("set-heard").textContent=heard+" histoire"+(heard>1?"s":"")+" écoutée"+(heard>1?"s":"")+" sur "+LIB.length+" · "+Object.keys(POS).length+" reprise(s) enregistrée(s)";
+ $("set-heard").textContent=heard+" histoire"+(heard>1?"s":"")+" lue"+(heard>1?"s":"")+" sur "+LIB.length;
  $("set-favs").textContent=favs.size+" favori"+(favs.size>1?"s":"");
  $("set-calm").value=String(SET.calm);$("set-count").value=String(SET.count);$("set-hcols").value=String(SET.hcols);
  $("set-about").textContent="Version du "+APP_VERSION+" · "+CHARS.length+" héros · "+LIB.length+" histoires · "+AUDIO.size+" voix";
@@ -1241,8 +1241,7 @@ document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!$("settings").hidd
 $("set-calm").onchange=e=>{SET.calm=+e.target.value;saveSet()};
 $("set-hcols").onchange=e=>{SET.hcols=+e.target.value;saveSet();applyHcols()};
 $("set-count").onchange=e=>{SET.count=+e.target.value;saveSet()};
-arm($("clr-heard"),"Confirmer ?",()=>{HEARD=new Set();store.set("mbh-heard",[]);renderLib();if(!$("herosheet").hidden)renderHeroes();refreshSettings()});
-arm($("clr-pos"),"Confirmer ?",()=>{POS={};store.set("mbh-pos",POS);refreshSettings()});
+arm($("clr-heard"),"Confirmer ?",()=>{HEARD=new Set();POS={};store.set("mbh-heard",[]);renderLib();if(!$("herosheet").hidden)renderHeroes();refreshSettings()});
 arm($("clr-favs"),"Confirmer ?",()=>{favs=new Set();store.set("mbh-favs",[]);renderLib();renderMine();syncPlayerFav();refreshSettings()});
 
 // Un appui long ne doit jamais sélectionner de texte ni ouvrir le menu contextuel
