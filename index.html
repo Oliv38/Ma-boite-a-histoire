@@ -257,6 +257,8 @@ select{font:inherit;background:var(--night);color:var(--moon);border:2px solid v
 .set-btn{border:2px solid var(--night-3);background:var(--night);color:var(--moon);border-radius:999px;padding:8px 14px;font:600 .88rem var(--body);cursor:pointer}
 .set-btn.arm{border-color:var(--heart,#ff8a9b);color:var(--heart,#ff8a9b)}
 .set-info{color:var(--muted);font-size:.85rem;margin:0}
+body,.player,.dock,.herosheet,.settings,header,.tabs,.card,button{-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}
+.player #text,.player #text *{-webkit-user-select:text;user-select:text}
 </style>
 
 <div class="sky" aria-hidden="true"></div>
@@ -1227,6 +1229,10 @@ $("set-count").onchange=e=>{SET.count=+e.target.value;saveSet()};
 arm($("clr-heard"),"Confirmer ?",()=>{HEARD=new Set();store.set("mbh-heard",[]);renderLib();if(!$("herosheet").hidden)renderHeroes();refreshSettings()});
 arm($("clr-pos"),"Confirmer ?",()=>{POS={};store.set("mbh-pos",POS);refreshSettings()});
 arm($("clr-favs"),"Confirmer ?",()=>{favs=new Set();store.set("mbh-favs",[]);renderLib();renderMine();syncPlayerFav();refreshSettings()});
+
+// Un appui long ne doit jamais sélectionner de texte ni ouvrir le menu contextuel
+document.addEventListener("contextmenu",e=>{if(e.target.closest&&e.target.closest("#player,.dock,.card,header"))e.preventDefault()});
+document.addEventListener("selectstart",e=>{if(!(e.target.closest&&e.target.closest("#text"))&&e.target.closest&&e.target.closest("#player,.dock,.card,header"))e.preventDefault()});
 
 renderLib();renderMine();
 </script>
