@@ -265,6 +265,10 @@ html:has(body.sheet-open),body.sheet-open{overflow:hidden;overscroll-behavior:no
 body.sheet-open .scrim{touch-action:none}
 .hs-in{overscroll-behavior:contain;-webkit-overflow-scrolling:touch}
 html:has(.player:not([hidden])){background:var(--deep)}
+.ptr{position:fixed;left:50%;top:calc(env(safe-area-inset-top,0px) + 8px);z-index:50;width:44px;height:44px;margin-left:-22px;border-radius:999px;background:var(--night-2);border:2px solid var(--night-3);display:grid;place-items:center;color:var(--lamp);transform:translateY(-60px);opacity:0;pointer-events:none;will-change:transform}
+.ptr svg{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round}
+.ptr.spin svg{animation:ptrspin .8s linear infinite}
+@keyframes ptrspin{to{transform:rotate(360deg)}}
 </style>
 
 <div class="sky" aria-hidden="true"></div>
@@ -367,6 +371,7 @@ html:has(.player:not([hidden])){background:var(--deep)}
   </section>
  </div>
 </div>
+<div class="ptr" id="ptr" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M20 12a8 8 0 1 1-2.6-5.9"/><path d="M20 4v5h-5"/></svg></div>
 <div class="scrim" id="scrim" aria-hidden="true"></div>
 <div class="herosheet" id="herosheet" hidden>
   <div class="hs-in">
@@ -1248,6 +1253,22 @@ document.addEventListener("touchmove",e=>{if(document.body.classList.contains("s
 (function(){let y=0;const el=document.querySelector(".hs-in");
  el.addEventListener("touchstart",e=>{y=e.touches[0].clientY},{passive:true});
  el.addEventListener("touchmove",e=>{const d=e.touches[0].clientY-y,top=el.scrollTop<=0,bot=el.scrollTop+el.clientHeight>=el.scrollHeight-1;if((top&&d>0)||(bot&&d<0))e.preventDefault()},{passive:false});
+})();
+
+/* Tirer vers le bas depuis le haut de la page : recharge l'application */
+(function(){
+ const el=$("ptr"),TH=80;let y0=null,dy=0,busy=false;
+ const blocked=()=>!$("player").hidden||document.body.classList.contains("sheet-open")||!$("settings").hidden;
+ const set=(d,o)=>{el.style.transform="translateY("+(Math.min(d,TH*1.2)-60)+"px) rotate("+d*3+"deg)";el.style.opacity=o};
+ window.addEventListener("touchstart",e=>{if(busy||blocked()||window.scrollY>0||e.touches.length!==1){y0=null;return}y0=e.touches[0].clientY;dy=0},{passive:true});
+ window.addEventListener("touchmove",e=>{if(y0==null||busy)return;if(blocked()||window.scrollY>0){y0=null;return}dy=Math.max(0,(e.touches[0].clientY-y0)*.5);if(dy>0)set(dy,Math.min(1,dy/TH))},{passive:true});
+ const end=()=>{if(y0==null)return;y0=null;
+  if(dy>=TH){busy=true;el.classList.add("spin");el.style.transition="transform .2s";el.style.transform="translateY("+(TH*.6)+"px)";el.style.opacity=1;
+   const go=()=>location.reload();
+   try{navigator.serviceWorker&&navigator.serviceWorker.getRegistration().then(r=>r&&r.update()).catch(()=>{}).finally(()=>setTimeout(go,350))}catch(e){setTimeout(go,350)}
+  }else{el.style.transition="transform .2s,opacity .2s";el.style.transform="translateY(-60px)";el.style.opacity=0;setTimeout(()=>el.style.transition="",250)}
+  dy=0};
+ window.addEventListener("touchend",end,{passive:true});window.addEventListener("touchcancel",end,{passive:true});
 })();
 
 renderLib();renderMine();
