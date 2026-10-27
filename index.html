@@ -819,7 +819,9 @@ function shortName(c){return c.n.split(" ")[0]==="Capitaine"?"Moustique":c.n.spl
 const HERO_ORDER=CHARS.slice();
 for(let i=HERO_ORDER.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[HERO_ORDER[i],HERO_ORDER[j]]=[HERO_ORDER[j],HERO_ORDER[i]]}
 function renderHeroes(){
- const all=HERO_ORDER;
+ // Les héros dont on a écouté le moins d'histoires passent en premier (découverte) ; égalités : ordre aléatoire
+ const nb=id=>LIB.filter(s=>s.char===id&&HEARD.has(s.id)).length;
+ const all=HERO_ORDER.slice().sort((a,b)=>nb(a.id)-nb(b.id));
  $("hsgrid").replaceChildren(...all.map(c=>{const b=document.createElement("button");b.className="hs-item";b.setAttribute("aria-pressed",heroes.has(c.id));
   b.innerHTML="<span></span><span></span>";b.firstChild.innerHTML=hico(c.id);b.lastChild.textContent=c.id?shortName(c):"Tous";b.title=c.n;
   b.onclick=()=>{heroes.has(c.id)?heroes.delete(c.id):heroes.add(c.id);b.setAttribute("aria-pressed",heroes.has(c.id));syncHeroBtn();renderLib()};return b}));
