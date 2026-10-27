@@ -191,12 +191,12 @@ input[type=text]{width:100%;font:inherit;padding:10px 14px;border-radius:12px;bo
 .p-hint{margin:0;text-align:center;font-size:.8rem;color:var(--muted);opacity:0;transition:opacity .6s}
 /* Mode calme : après quelques secondes, tout s'estompe sauf la lune */
 .p-top,.p-stage>:not(.p-moon),.p-bottom .bar{transition:opacity .5s ease}
-.player.calm .p-top,.player.calm .p-stage>:not(.p-moon),.player.calm .p-bottom .bar{transition:opacity 6s ease}
+.player.calm .p-top,.player.calm .p-stage>:not(.p-moon),.player.calm .p-bottom .bar{transition:opacity 10s ease}
 .player.calm .p-top,.player.calm .p-stage>:not(.p-moon),.player.calm .p-bottom .bar{opacity:0;pointer-events:none}
 .player .sky{position:absolute}
 .player>:not(.sky){position:relative;z-index:1}
 #pemoji{transition:filter .5s ease}
-.player.calm #pemoji{transition:filter 8s ease}
+.player.calm #pemoji{transition:filter 12s ease}
 #stop{position:relative}
 #stop .hold{position:absolute;inset:0;width:100%;height:100%;transform:rotate(-90deg);fill:none;stroke:var(--lamp);stroke-width:3;stroke-dasharray:126;stroke-dashoffset:126;pointer-events:none}
 #stop.holding .hold{transition:stroke-dashoffset 1s linear;stroke-dashoffset:0}
@@ -209,7 +209,7 @@ input[type=text]{width:100%;font:inherit;padding:10px 14px;border-radius:12px;bo
 .p-moon.has-img #pemoji,.p-moon.has-img #pemoji img{display:block;width:100%;height:100%;object-fit:cover}
 @media (max-height:700px){.p-moon.has-img{width:min(60vw,260px)}}
 .player.calm .p-moon{filter:brightness(.55)}
-.player.calm .p-moon.has-img{width:min(46vw,190px);transition:width 10s ease-in-out}
+.player.calm .p-moon.has-img{width:min(46vw,190px);transition:width 15s ease-in-out}
 .player.calm #pemoji{filter:grayscale(.8) brightness(.6)}
 .player.calm .p-hint{opacity:.35}
 .player .text:not([hidden]){max-width:560px;margin:10px auto 0;width:100%}
