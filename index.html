@@ -91,7 +91,7 @@ button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid 
 .th-chip{border:2px solid var(--night-3);background:var(--night);color:var(--moon);font:600 .9rem var(--body);border-radius:999px;padding:7px 13px;cursor:pointer}
 .th-chip[aria-pressed="true"]{background:var(--lamp);border-color:var(--lamp);color:var(--night)}
 .hs-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(104px,1fr));gap:8px;padding-bottom:8px}
-.hs-in{max-height:62vh;overflow-y:auto}
+.hs-in{overflow:visible}
 .hs-item{border:2px solid transparent;background:var(--night);color:var(--moon);border-radius:16px;padding:12px 6px 10px;cursor:pointer;display:grid;justify-items:center;gap:6px;font:600 .9rem/1.2 var(--body);text-align:center}
 .hs-item span:first-child{display:grid;place-items:center}
 .hs-item .hemo{font-size:2.3rem;line-height:1}
@@ -263,13 +263,13 @@ body,.player,.dock,.herosheet,.settings,header,.tabs,.card,button{-webkit-user-s
 .player #text,.player #text *{-webkit-user-select:text;user-select:text}
 html:has(body.sheet-open),body.sheet-open{overflow:hidden;overscroll-behavior:none}
 body.sheet-open .scrim{touch-action:none}
-.hs-in{overscroll-behavior:contain;-webkit-overflow-scrolling:touch}
+
 html:has(.player:not([hidden])){background:var(--deep)}
 .ptr{position:fixed;left:50%;top:calc(env(safe-area-inset-top,0px) + 8px);z-index:50;width:46px;height:46px;margin-left:-23px;border-radius:999px;background:none;border:0;display:grid;place-items:center;color:var(--lamp);transform:translateY(-60px);opacity:0;pointer-events:none;will-change:transform}
 .ptr svg{width:46px;height:46px;fill:var(--lamp-soft);stroke:none}
 .ptr.spin svg{animation:ptrspin .8s linear infinite}
 @keyframes ptrspin{to{transform:rotate(360deg)}}
-.hs-head{position:sticky;top:0;z-index:3;background:var(--night-2);margin:0;padding:4px 0 10px;box-shadow:0 8px 10px -8px rgba(4,7,22,.7)}
+.hs-body{max-height:56vh;overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch}
 </style>
 
 <div class="sky" aria-hidden="true"></div>
@@ -377,7 +377,7 @@ html:has(.player:not([hidden])){background:var(--deep)}
 <div class="herosheet" id="herosheet" hidden>
   <div class="hs-in">
     <div class="hs-head"><p class="hs-title">Filtres</p><span class="hs-actions"><button class="hs-link" id="hsclear" hidden>Effacer</button><button class="hs-ok" id="hsok">OK</button></span></div>
-    <p class="hs-sub">Héros</p><div class="hs-grid" id="hsgrid"></div><p class="hs-sub" style="margin-top:18px">Thèmes</p><div class="th-grid" id="thgrid"></div>
+    <div class="hs-body"><p class="hs-sub">Héros</p><div class="hs-grid" id="hsgrid"></div><p class="hs-sub" style="margin-top:18px">Thèmes</p><div class="th-grid" id="thgrid"></div></div>
   </div>
 </div>
 <div class="dial" id="dial">
@@ -1250,8 +1250,8 @@ document.addEventListener("contextmenu",e=>{if(e.target.closest&&e.target.closes
 document.addEventListener("selectstart",e=>{if(!(e.target.closest&&e.target.closest("#text"))&&e.target.closest&&e.target.closest("#player,.dock,.card,header"))e.preventDefault()});
 
 // Sélecteur ouvert : seule la liste du sélecteur peut défiler, jamais la page derrière
-document.addEventListener("touchmove",e=>{if(document.body.classList.contains("sheet-open")&&!e.target.closest(".hs-in"))e.preventDefault()},{passive:false});
-(function(){let y=0;const el=document.querySelector(".hs-in");
+document.addEventListener("touchmove",e=>{if(document.body.classList.contains("sheet-open")&&!e.target.closest(".hs-body"))e.preventDefault()},{passive:false});
+(function(){let y=0;const el=document.querySelector(".hs-body");
  el.addEventListener("touchstart",e=>{y=e.touches[0].clientY},{passive:true});
  el.addEventListener("touchmove",e=>{const d=e.touches[0].clientY-y,top=el.scrollTop<=0,bot=el.scrollTop+el.clientHeight>=el.scrollHeight-1;if((top&&d>0)||(bot&&d<0))e.preventDefault()},{passive:false});
 })();
