@@ -865,10 +865,11 @@ let heroes=new Set(), themes=new Set();
 const match=s=>(!durs.size||durs.has(s.dur))&&(!favOnly||favs.has(s.id))&&(!heroes.size||heroes.has(s.char))&&(!themes.size||(s.themes||[]).some(t=>themes.has(t)));
 function toggleFav(id){favs.has(id)?favs.delete(id):favs.add(id);store.set("mbh-favs",[...favs]);renderLib();renderMine();syncPlayerFav()}
 function syncPlayerFav(){const b=$("pfav");if(!current){b.hidden=true;return}b.hidden=false;const on=favs.has(current.id);b.setAttribute("aria-pressed",on);b.setAttribute("aria-label",on?"Retirer des favoris":"Ajouter aux favoris")}
-/* Ordre : non lues d'abord, puis lues ; au hasard dans chaque groupe */
+/* Ordre : entamées d'abord, puis non lues, puis lues ; au hasard dans chaque groupe */
 const RK=new Map(LIB.map(s=>[s.id,Math.random()]));
-const ordered=l=>l.slice().sort((a,b)=>(HEARD.has(a.id)-HEARD.has(b.id))||RK.get(a.id)-RK.get(b.id));
-const fresh=l=>l.map(s=>[Math.random(),s]).sort((a,b)=>a[0]-b[0]).map(x=>x[1]).sort((a,b)=>HEARD.has(a.id)-HEARD.has(b.id));
+const rank=s=>{const p=POS[s.id];return(p&&p.f>0.02)?0:HEARD.has(s.id)?2:1};
+const ordered=l=>l.slice().sort((a,b)=>(rank(a)-rank(b))||RK.get(a.id)-RK.get(b.id));
+const fresh=l=>l.map(s=>[Math.random(),s]).sort((a,b)=>a[0]-b[0]).map(x=>x[1]).sort((a,b)=>rank(a)-rank(b));
 function renderLib(){
  const list=ordered(LIB.filter(match));
  if(favOnly&&!list.length){const e=document.createElement("p");e.className="empty";e.textContent=durs.size?"Aucun favori de cette durée. Touche le cœur d'une histoire pour l'ajouter.":"Pas encore de favori. Touche le cœur d'une histoire pour l'ajouter ici.";$("grid").replaceChildren(e);$("count").textContent="Favoris";return}
