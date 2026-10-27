@@ -1264,7 +1264,12 @@ document.addEventListener("touchmove",e=>{if(document.body.classList.contains("s
  window.addEventListener("touchmove",e=>{if(y0==null||busy)return;if(blocked()||window.scrollY>0){y0=null;return}dy=Math.max(0,(e.touches[0].clientY-y0)*.5);if(dy>0)set(dy,Math.min(1,dy/TH))},{passive:true});
  const end=()=>{if(y0==null)return;y0=null;
   if(dy>=TH){busy=true;el.classList.add("spin");el.style.transition="transform .2s";el.style.transform="translateY("+(TH*.6)+"px)";el.style.opacity=1;
-   const go=()=>location.reload();
+   const go=()=>{
+    // Si le rechargement est bloqué (ex. page intégrée dans l'artefact), on arrête la roue et on actualise la liste sur place
+    setTimeout(()=>{busy=false;el.classList.remove("spin");el.style.transition="transform .25s,opacity .25s";el.style.transform="translateY(-60px)";el.style.opacity=0;setTimeout(()=>el.style.transition="",300);
+     LIB.forEach(s=>RK.set(s.id,Math.random()));renderLib()},1800);
+    try{location.reload()}catch(e){}
+   };
    try{navigator.serviceWorker&&navigator.serviceWorker.getRegistration().then(r=>r&&r.update()).catch(()=>{}).finally(()=>setTimeout(go,350))}catch(e){setTimeout(go,350)}
   }else{el.style.transition="transform .2s,opacity .2s";el.style.transform="translateY(-60px)";el.style.opacity=0;setTimeout(()=>el.style.transition="",250)}
   dy=0};
