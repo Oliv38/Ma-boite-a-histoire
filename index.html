@@ -168,6 +168,7 @@ input[type=text]{width:100%;font:inherit;padding:10px 14px;border-radius:12px;bo
 .player .ctrls,.player #showtxt{display:none!important}
 .text[hidden]{display:none!important}
 .p-top{display:flex;justify-content:space-between;align-items:center}
+.p-count[hidden]{display:none}
 .p-count{display:flex;align-items:center;gap:4px;background:color-mix(in srgb,var(--moon) 8%,transparent);border-radius:999px;padding:3px}
 .p-count button{width:40px;height:40px;border-radius:50%;border:0;background:transparent;color:var(--lamp-soft);font:800 1.5rem/1 var(--body);cursor:pointer;display:grid;place-items:center;padding:0}
 .p-count button:disabled{opacity:.3;cursor:default}
@@ -1013,7 +1014,7 @@ function buildQueue(target=15){
  for(const s of pool){if(tot>=target||q.length>=5)break;if(tot+s.dur>target+3&&q.length)continue;q.push(s);tot+=s.dur}
  return q;
 }
-function updCount(){const n=queue?queue.length-qi:1;$("cnum").textContent=n;$("cminus").disabled=n<=1;$("cplus").disabled=n>=9}
+function updCount(){document.querySelector(".p-count").hidden=!queue;const n=queue?queue.length-qi:1;$("cnum").textContent=n;$("cminus").disabled=n<=1;$("cplus").disabled=n>=9}
 function pickMore(){
  const used=new Set((queue||[current]).map(s=>s.id));
  let pool=LIB.filter(s=>AUDIO.has(s.id)&&!used.has(s.id)&&match(s));
