@@ -153,6 +153,7 @@ input[type=text]{width:100%;font:inherit;padding:10px 14px;border-radius:12px;bo
 .pstate{display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;font-size:.85rem;color:var(--muted)}
 .linkbtn{background:none;border:0;color:var(--muted);text-decoration:underline;cursor:pointer;font:inherit;padding:0}
 .offline{margin-top:22px;display:grid;gap:8px;justify-items:start}
+.offline[hidden],.set-info[hidden]{display:none}
 .offline .sbtn{padding:10px 16px;font-size:.95rem}
 .mine-title{font:700 1.2rem var(--display);margin:26px 0 10px}
 /* Lecteur */
@@ -227,6 +228,35 @@ body.sheet-open .dock{z-index:8}
 .ctrls{display:flex;gap:8px;align-items:center;flex-wrap:wrap;font-size:.85rem;color:var(--muted)}
 select{font:inherit;background:var(--night);color:var(--moon);border:2px solid var(--night-3);border-radius:10px;padding:4px 6px;max-width:200px}
 @media (prefers-reduced-motion:reduce){.bar i{transition:none}}
+
+/* Taille des icônes du sélecteur de héros */
+.hs-row{display:flex;align-items:center;justify-content:space-between;gap:8px;margin:4px 0 8px}
+.hs-row .hs-sub{margin:0}
+.hs-size{display:flex;gap:4px;background:var(--night);border-radius:999px;padding:3px}
+.hs-size button{border:0;background:transparent;color:var(--muted);width:38px;height:30px;border-radius:999px;cursor:pointer;display:grid;place-items:center}
+.hs-size button[aria-pressed="true"]{background:var(--lamp);color:var(--night)}
+.hs-size svg{width:18px;height:18px;fill:currentColor}
+.hs-grid{grid-template-columns:repeat(var(--hc,3),1fr)}
+.hs-grid.big .hs-item{padding:18px 8px 14px;font-size:1rem}
+.hs-grid.big .hs-item .hemo{font-size:3.6rem}
+.hs-grid:not(.big) .hs-item .hemo{font-size:2rem}
+.hs-grid:not(.big) .hs-item{padding:10px 4px 8px;font-size:.8rem}
+/* Réglages */
+.logo{touch-action:manipulation;cursor:default;-webkit-tap-highlight-color:transparent;user-select:none;-webkit-user-select:none}
+.settings{position:fixed;inset:0;z-index:60;background:rgba(4,7,22,.72);display:grid;place-items:center;padding:16px}
+.settings[hidden]{display:none}
+.set-box{background:var(--night-2);border:2px solid var(--night-3);border-radius:22px;width:min(560px,100%);max-height:88vh;overflow-y:auto;padding:18px 18px 22px;color:var(--moon)}
+.set-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px}
+.set-head h2{font:800 1.2rem var(--display);color:var(--lamp-soft);margin:0}
+.set-sec{border-top:1px solid var(--night-3);padding:14px 0 4px;margin-top:12px;display:grid;gap:10px}
+.set-sec:first-of-type{border-top:0;margin-top:0}
+.set-sec h3{font:700 .78rem var(--body);letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin:0}
+.set-row{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.set-row label,.set-row span.l{font:600 .95rem var(--body)}
+.set-sel{background:var(--night);color:var(--moon);border:2px solid var(--night-3);border-radius:999px;padding:7px 12px;font:600 .9rem var(--body)}
+.set-btn{border:2px solid var(--night-3);background:var(--night);color:var(--moon);border-radius:999px;padding:8px 14px;font:600 .88rem var(--body);cursor:pointer}
+.set-btn.arm{border-color:var(--heart,#ff8a9b);color:var(--heart,#ff8a9b)}
+.set-info{color:var(--muted);font-size:.85rem;margin:0}
 </style>
 
 <div class="sky" aria-hidden="true"></div>
@@ -256,10 +286,6 @@ select{font:inherit;background:var(--night);color:var(--moon);border:2px solid v
       <span class="count" id="count" style="margin-left:0"></span>
     </div>
     <div class="grid" id="grid"></div>
-    <div class="offline" id="offline" hidden>
-      <button class="sbtn" id="dlall">Écouter hors connexion : tout télécharger</button>
-      <p class="note" id="dlstat">Les histoires déjà écoutées restent disponibles sans Internet.</p>
-    </div>
   </section>
 
   <section id="v-new" hidden>
@@ -305,11 +331,36 @@ select{font:inherit;background:var(--night);color:var(--moon);border:2px solid v
 <button class="shuffle soiree" id="soiree" aria-label="Soirée : enchaîner des histoires pendant environ 15 minutes">
   <svg class="sh-play" viewBox="0 0 24 24" aria-hidden="true" style="margin:0"><path d="M14.5 3.2a8.8 8.8 0 1 0 6.3 12.3 7 7 0 0 1-6.3-12.3z"/></svg>
 </button>
+<div class="settings" id="settings" hidden>
+ <div class="set-box" role="dialog" aria-modal="true" aria-labelledby="set-t">
+  <div class="set-head"><h2 id="set-t">Réglages</h2><button class="hs-ok" id="setok">OK</button></div>
+  <section class="set-sec"><h3>Mode hors ligne</h3>
+   <div class="offline" id="offline" hidden>
+    <button class="sbtn" id="dlall">Tout télécharger pour écouter sans Internet</button>
+    <p class="note" id="dlstat">Les histoires déjà écoutées restent disponibles sans Internet.</p>
+   </div>
+   <p class="set-info" id="offno">Disponible uniquement sur le site autonome (oliv38.github.io/Ma-boite-a-histoire).</p>
+  </section>
+  <section class="set-sec"><h3>Historique d'écoute</h3>
+   <p class="set-info" id="set-heard"></p>
+   <div class="set-row"><span class="l">« Déjà écoutées »</span><button class="set-btn" id="clr-heard">Effacer</button></div>
+   <div class="set-row"><span class="l">Reprises de lecture</span><button class="set-btn" id="clr-pos">Effacer</button></div>
+  </section>
+  <section class="set-sec"><h3>Lecteur</h3>
+   <div class="set-row"><label for="set-calm">Passage en mode calme après</label><select class="set-sel" id="set-calm"><option value="8">8 s</option><option value="12">12 s</option><option value="20">20 s</option><option value="30">30 s</option><option value="60">1 min</option></select></div>
+   <div class="set-row"><label for="set-target">Durée d'une soirée</label><select class="set-sel" id="set-target"><option value="10">10 min</option><option value="15">15 min</option><option value="20">20 min</option><option value="30">30 min</option><option value="45">45 min</option></select></div>
+  </section>
+  <section class="set-sec"><h3>Favoris et infos</h3>
+   <div class="set-row"><span class="l" id="set-favs"></span><button class="set-btn" id="clr-favs">Effacer</button></div>
+   <p class="set-info" id="set-about"></p>
+  </section>
+ </div>
+</div>
 <div class="scrim" id="scrim" aria-hidden="true"></div>
 <div class="herosheet" id="herosheet" hidden>
   <div class="hs-in">
     <div class="hs-head"><p class="hs-title">Filtres</p><span class="hs-actions"><button class="hs-link" id="hsclear" hidden>Effacer</button><button class="hs-ok" id="hsok">OK</button></span></div>
-    <p class="hs-sub">Héros</p><div class="hs-grid" id="hsgrid"></div><p class="hs-sub" style="margin-top:18px">Thèmes</p><div class="th-grid" id="thgrid"></div>
+    <div class="hs-row"><p class="hs-sub">Héros</p><div class="hs-size" role="group" aria-label="Taille des icônes"><button id="hs3" aria-label="Petites icônes, 3 par ligne"><svg viewBox="0 0 24 24"><rect x="2" y="2" width="5.5" height="5.5" rx="1.5"/><rect x="9.2" y="2" width="5.5" height="5.5" rx="1.5"/><rect x="16.5" y="2" width="5.5" height="5.5" rx="1.5"/><rect x="2" y="9.2" width="5.5" height="5.5" rx="1.5"/><rect x="9.2" y="9.2" width="5.5" height="5.5" rx="1.5"/><rect x="16.5" y="9.2" width="5.5" height="5.5" rx="1.5"/><rect x="2" y="16.5" width="5.5" height="5.5" rx="1.5"/><rect x="9.2" y="16.5" width="5.5" height="5.5" rx="1.5"/><rect x="16.5" y="16.5" width="5.5" height="5.5" rx="1.5"/></svg></button><button id="hs2" aria-label="Grandes icônes, 2 par ligne"><svg viewBox="0 0 24 24"><rect x="2" y="2" width="9" height="9" rx="2.2"/><rect x="13" y="2" width="9" height="9" rx="2.2"/><rect x="2" y="13" width="9" height="9" rx="2.2"/><rect x="13" y="13" width="9" height="9" rx="2.2"/></svg></button></div></div><div class="hs-grid" id="hsgrid"></div><p class="hs-sub" style="margin-top:18px">Thèmes</p><div class="th-grid" id="thgrid"></div>
   </div>
 </div>
 <div class="dial" id="dial">
@@ -747,6 +798,8 @@ const BUILTIN={
 /* ---------- Stockage local ---------- */
 const store={get(k,d){try{const v=localStorage.getItem(k);return v?JSON.parse(v):d}catch(e){return d}},set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}};
 let mine=store.get("mbh-mine",[]);
+const SET=Object.assign({calm:12,target:15,hcols:3},store.get("mbh-set",{}));
+function saveSet(){store.set("mbh-set",SET)}
 const textOf=s=>s.text||BUILTIN[s.id]||null;
 
 /* ---------- IA (capability sample) ---------- */
@@ -836,10 +889,14 @@ function shortName(c){return c.n.split(" ")[0]==="Capitaine"?"Moustique":c.n.spl
 // Ordre des héros tiré au sort à chaque ouverture de la page
 const HERO_ORDER=CHARS.slice();
 for(let i=HERO_ORDER.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[HERO_ORDER[i],HERO_ORDER[j]]=[HERO_ORDER[j],HERO_ORDER[i]]}
+function applyHcols(){const g=$("hsgrid");g.style.setProperty("--hc",SET.hcols);g.classList.toggle("big",SET.hcols===2);$("hs3").setAttribute("aria-pressed",SET.hcols===3);$("hs2").setAttribute("aria-pressed",SET.hcols===2)}
+$("hs3").onclick=()=>{SET.hcols=3;saveSet();applyHcols()};
+$("hs2").onclick=()=>{SET.hcols=2;saveSet();applyHcols()};
 function renderHeroes(){
  // Les héros dont on a écouté le moins d'histoires passent en premier (découverte) ; égalités : ordre aléatoire
  const nb=id=>LIB.filter(s=>s.char===id&&HEARD.has(s.id)).length;
  const all=HERO_ORDER.slice().sort((a,b)=>nb(a.id)-nb(b.id));
+ applyHcols();
  $("hsgrid").replaceChildren(...all.map(c=>{const b=document.createElement("button");b.className="hs-item";b.setAttribute("aria-pressed",heroes.has(c.id));
   b.innerHTML="<span></span><span></span>";b.firstChild.innerHTML=hico(c.id);b.lastChild.textContent=c.id?shortName(c):"Tous";b.title=c.n;
   b.onclick=()=>{heroes.has(c.id)?heroes.delete(c.id):heroes.add(c.id);b.setAttribute("aria-pressed",heroes.has(c.id));syncHeroBtn();renderLib()};return b}));
@@ -1036,7 +1093,7 @@ function statusLine(mins){
  if(queue)return "Soirée · histoire "+(qi+1)+" sur "+queue.length+" · "+who;
  return "";
 }
-function buildQueue(target=15){
+function buildQueue(target=SET.target){
  let pool=LIB.filter(s=>AUDIO.has(s.id)&&match(s));
  if(pool.length<2)pool=LIB.filter(s=>AUDIO.has(s.id));
  pool=fresh(pool);
@@ -1123,7 +1180,7 @@ $("rate").onchange=$("voice").onchange=()=>{if(mode==="audio"){audio.playbackRat
 
 /* Mode calme */
 var calmT=0;
-function wake(){$("player").classList.remove("calm","night");clearTimeout(calmT);calmT=setTimeout(()=>{if(playing&&!$("player").hidden)$("player").classList.add("calm")},12000)}
+function wake(){$("player").classList.remove("calm","night");clearTimeout(calmT);calmT=setTimeout(()=>{if(playing&&!$("player").hidden)$("player").classList.add("calm")},SET.calm*1000)}
 // En mode calme, le premier toucher réveille seulement l'écran : il ne déclenche aucun bouton
 $("player").addEventListener("pointerdown",e=>{if($("player").classList.contains("calm")){$("player").dataset.justwoke="1";setTimeout(()=>delete $("player").dataset.justwoke,700)}wake()},true);
 $("player").addEventListener("click",e=>{if($("player").dataset.justwoke){e.preventDefault();e.stopPropagation();delete $("player").dataset.justwoke}},true);
@@ -1134,7 +1191,7 @@ const MEDIA_CACHE="mbh-media-v1";
 async function offlineCount(){try{const c=await caches.open(MEDIA_CACHE);const keys=await c.keys();return keys.filter(k=>/\/audio\//.test(k.url)).length}catch(e){return 0}}
 async function refreshOffline(){const n=await offlineCount();const tot=AUDIO.size;$("dlstat").textContent=n>=tot?"Toutes les histoires sont disponibles hors connexion.":n+" / "+tot+" histoires disponibles hors connexion. Les histoires écoutées sont gardées automatiquement.";$("dlall").hidden=n>=tot}
 if("serviceWorker" in navigator&&location.protocol==="https:"){
- navigator.serviceWorker.register("sw.js").then(()=>{$("offline").hidden=false;refreshOffline()}).catch(()=>{});
+ navigator.serviceWorker.register("sw.js").then(()=>{$("offline").hidden=false;$("offno").hidden=true;refreshOffline()}).catch(()=>{});
 }
 $("dlall").onclick=async()=>{
  $("dlall").disabled=true;
@@ -1147,6 +1204,31 @@ $("dlall").onclick=async()=>{
  }catch(e){$("dlstat").textContent="Le téléchargement s'est interrompu. Vérifie la connexion et réessaie."}
  $("dlall").disabled=false;refreshOffline();
 };
+
+/* Réglages : triple toucher sur le logo */
+const APP_VERSION="27 oct. 2026";
+let logoTaps=[];
+document.querySelector(".logo").addEventListener("click",()=>{const t=Date.now();logoTaps=logoTaps.filter(x=>t-x<800);logoTaps.push(t);if(logoTaps.length>=3){logoTaps=[];openSettings()}});
+function arm(btn,label,fn){let t=0;const base=btn.textContent;btn.onclick=()=>{if(t){clearTimeout(t);t=0;btn.classList.remove("arm");btn.textContent=base;fn();return}btn.classList.add("arm");btn.textContent=label;t=setTimeout(()=>{t=0;btn.classList.remove("arm");btn.textContent=base},3000)}}
+function refreshSettings(){
+ const heard=[...HEARD].filter(id=>LIB.some(s=>s.id===id)).length;
+ $("set-heard").textContent=heard+" histoire"+(heard>1?"s":"")+" écoutée"+(heard>1?"s":"")+" sur "+LIB.length+" · "+Object.keys(POS).length+" reprise(s) enregistrée(s)";
+ $("set-favs").textContent=favs.size+" favori"+(favs.size>1?"s":"");
+ $("set-calm").value=String(SET.calm);$("set-target").value=String(SET.target);
+ $("set-about").textContent="Version du "+APP_VERSION+" · "+CHARS.length+" héros · "+LIB.length+" histoires · "+AUDIO.size+" voix";
+ if(navigator.storage&&navigator.storage.estimate)navigator.storage.estimate().then(e=>{if(e.usage)$("set-about").textContent+=" · "+Math.round(e.usage/1048576)+" Mo stockés sur cet appareil"}).catch(()=>{});
+ if(!$("offline").hidden)refreshOffline();
+}
+function openSettings(){refreshSettings();$("settings").hidden=false;$("setok").focus()}
+function closeSettings(){$("settings").hidden=true}
+$("setok").onclick=closeSettings;
+$("settings").addEventListener("click",e=>{if(e.target===$("settings"))closeSettings()});
+document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!$("settings").hidden)closeSettings()});
+$("set-calm").onchange=e=>{SET.calm=+e.target.value;saveSet()};
+$("set-target").onchange=e=>{SET.target=+e.target.value;saveSet()};
+arm($("clr-heard"),"Confirmer ?",()=>{HEARD=new Set();store.set("mbh-heard",[]);renderLib();if(!$("herosheet").hidden)renderHeroes();refreshSettings()});
+arm($("clr-pos"),"Confirmer ?",()=>{POS={};store.set("mbh-pos",POS);refreshSettings()});
+arm($("clr-favs"),"Confirmer ?",()=>{favs=new Set();store.set("mbh-favs",[]);renderLib();renderMine();syncPlayerFav();refreshSettings()});
 
 renderLib();renderMine();
 </script>
