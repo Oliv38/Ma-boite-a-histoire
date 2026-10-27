@@ -354,6 +354,9 @@ html:has(.player:not([hidden])){background:var(--deep)}
    <div class="set-row"><span class="l">« Déjà écoutées »</span><button class="set-btn" id="clr-heard">Effacer</button></div>
    <div class="set-row"><span class="l">Reprises de lecture</span><button class="set-btn" id="clr-pos">Effacer</button></div>
   </section>
+  <section class="set-sec"><h3>Affichage</h3>
+   <div class="set-row"><label for="set-hcols">Icônes du filtre héros</label><select class="set-sel" id="set-hcols"><option value="3">Petites (3 par ligne)</option><option value="2">Grosses (2 par ligne)</option></select></div>
+  </section>
   <section class="set-sec"><h3>Lecteur</h3>
    <div class="set-row"><label for="set-calm">Passage en mode calme après</label><select class="set-sel" id="set-calm"><option value="8">8 s</option><option value="12">12 s</option><option value="20">20 s</option><option value="30">30 s</option><option value="60">1 min</option></select></div>
    <div class="set-row"><label for="set-count">Histoires par soirée</label><select class="set-sel" id="set-count"><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option><option value="8">8</option><option value="9">9</option></select></div>
@@ -368,7 +371,7 @@ html:has(.player:not([hidden])){background:var(--deep)}
 <div class="herosheet" id="herosheet" hidden>
   <div class="hs-in">
     <div class="hs-head"><p class="hs-title">Filtres</p><span class="hs-actions"><button class="hs-link" id="hsclear" hidden>Effacer</button><button class="hs-ok" id="hsok">OK</button></span></div>
-    <div class="hs-row"><p class="hs-sub">Héros</p><div class="hs-size" role="group" aria-label="Taille des icônes"><button id="hs3" aria-label="Petites icônes, 3 par ligne"><svg viewBox="0 0 24 24"><rect x="2" y="2" width="5.5" height="5.5" rx="1.5"/><rect x="9.2" y="2" width="5.5" height="5.5" rx="1.5"/><rect x="16.5" y="2" width="5.5" height="5.5" rx="1.5"/><rect x="2" y="9.2" width="5.5" height="5.5" rx="1.5"/><rect x="9.2" y="9.2" width="5.5" height="5.5" rx="1.5"/><rect x="16.5" y="9.2" width="5.5" height="5.5" rx="1.5"/><rect x="2" y="16.5" width="5.5" height="5.5" rx="1.5"/><rect x="9.2" y="16.5" width="5.5" height="5.5" rx="1.5"/><rect x="16.5" y="16.5" width="5.5" height="5.5" rx="1.5"/></svg></button><button id="hs2" aria-label="Grandes icônes, 2 par ligne"><svg viewBox="0 0 24 24"><rect x="2" y="2" width="9" height="9" rx="2.2"/><rect x="13" y="2" width="9" height="9" rx="2.2"/><rect x="2" y="13" width="9" height="9" rx="2.2"/><rect x="13" y="13" width="9" height="9" rx="2.2"/></svg></button></div></div><div class="hs-grid" id="hsgrid"></div><p class="hs-sub" style="margin-top:18px">Thèmes</p><div class="th-grid" id="thgrid"></div>
+    <p class="hs-sub">Héros</p><div class="hs-grid" id="hsgrid"></div><p class="hs-sub" style="margin-top:18px">Thèmes</p><div class="th-grid" id="thgrid"></div>
   </div>
 </div>
 <div class="dial" id="dial">
@@ -898,9 +901,7 @@ function shortName(c){return c.n.split(" ")[0]==="Capitaine"?"Moustique":c.n.spl
 // Ordre des héros tiré au sort à chaque ouverture de la page
 const HERO_ORDER=CHARS.slice();
 for(let i=HERO_ORDER.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[HERO_ORDER[i],HERO_ORDER[j]]=[HERO_ORDER[j],HERO_ORDER[i]]}
-function applyHcols(){const g=$("hsgrid");g.style.setProperty("--hc",SET.hcols);g.classList.toggle("big",SET.hcols===2);$("hs3").setAttribute("aria-pressed",SET.hcols===3);$("hs2").setAttribute("aria-pressed",SET.hcols===2)}
-$("hs3").onclick=()=>{SET.hcols=3;saveSet();applyHcols()};
-$("hs2").onclick=()=>{SET.hcols=2;saveSet();applyHcols()};
+function applyHcols(){const g=$("hsgrid");g.style.setProperty("--hc",SET.hcols);g.classList.toggle("big",SET.hcols===2)}
 function renderHeroes(){
  // Les héros dont on a écouté le moins d'histoires passent en premier (découverte) ; égalités : ordre aléatoire
  const nb=id=>LIB.filter(s=>s.char===id&&HEARD.has(s.id)).length;
@@ -1221,7 +1222,7 @@ function refreshSettings(){
  const heard=[...HEARD].filter(id=>LIB.some(s=>s.id===id)).length;
  $("set-heard").textContent=heard+" histoire"+(heard>1?"s":"")+" écoutée"+(heard>1?"s":"")+" sur "+LIB.length+" · "+Object.keys(POS).length+" reprise(s) enregistrée(s)";
  $("set-favs").textContent=favs.size+" favori"+(favs.size>1?"s":"");
- $("set-calm").value=String(SET.calm);$("set-count").value=String(SET.count);
+ $("set-calm").value=String(SET.calm);$("set-count").value=String(SET.count);$("set-hcols").value=String(SET.hcols);
  $("set-about").textContent="Version du "+APP_VERSION+" · "+CHARS.length+" héros · "+LIB.length+" histoires · "+AUDIO.size+" voix";
  if(navigator.storage&&navigator.storage.estimate)navigator.storage.estimate().then(e=>{if(e.usage)$("set-about").textContent+=" · "+Math.round(e.usage/1048576)+" Mo stockés sur cet appareil"}).catch(()=>{});
  if(!$("offline").hidden)refreshOffline();
@@ -1232,6 +1233,7 @@ $("setok").onclick=closeSettings;
 $("settings").addEventListener("click",e=>{if(e.target===$("settings"))closeSettings()});
 document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!$("settings").hidden)closeSettings()});
 $("set-calm").onchange=e=>{SET.calm=+e.target.value;saveSet()};
+$("set-hcols").onchange=e=>{SET.hcols=+e.target.value;saveSet();applyHcols()};
 $("set-count").onchange=e=>{SET.count=+e.target.value;saveSet()};
 arm($("clr-heard"),"Confirmer ?",()=>{HEARD=new Set();store.set("mbh-heard",[]);renderLib();if(!$("herosheet").hidden)renderHeroes();refreshSettings()});
 arm($("clr-pos"),"Confirmer ?",()=>{POS={};store.set("mbh-pos",POS);refreshSettings()});
