@@ -259,6 +259,9 @@ select{font:inherit;background:var(--night);color:var(--moon);border:2px solid v
 .set-info{color:var(--muted);font-size:.85rem;margin:0}
 body,.player,.dock,.herosheet,.settings,header,.tabs,.card,button{-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}
 .player #text,.player #text *{-webkit-user-select:text;user-select:text}
+html:has(body.sheet-open),body.sheet-open{overflow:hidden;overscroll-behavior:none}
+body.sheet-open .scrim{touch-action:none}
+.hs-in{overscroll-behavior:contain;-webkit-overflow-scrolling:touch}
 </style>
 
 <div class="sky" aria-hidden="true"></div>
@@ -1233,6 +1236,13 @@ arm($("clr-favs"),"Confirmer ?",()=>{favs=new Set();store.set("mbh-favs",[]);ren
 // Un appui long ne doit jamais sélectionner de texte ni ouvrir le menu contextuel
 document.addEventListener("contextmenu",e=>{if(e.target.closest&&e.target.closest("#player,.dock,.card,header"))e.preventDefault()});
 document.addEventListener("selectstart",e=>{if(!(e.target.closest&&e.target.closest("#text"))&&e.target.closest&&e.target.closest("#player,.dock,.card,header"))e.preventDefault()});
+
+// Sélecteur ouvert : seule la liste du sélecteur peut défiler, jamais la page derrière
+document.addEventListener("touchmove",e=>{if(document.body.classList.contains("sheet-open")&&!e.target.closest(".hs-in"))e.preventDefault()},{passive:false});
+(function(){let y=0;const el=document.querySelector(".hs-in");
+ el.addEventListener("touchstart",e=>{y=e.touches[0].clientY},{passive:true});
+ el.addEventListener("touchmove",e=>{const d=e.touches[0].clientY-y,top=el.scrollTop<=0,bot=el.scrollTop+el.clientHeight>=el.scrollHeight-1;if((top&&d>0)||(bot&&d<0))e.preventDefault()},{passive:false});
+})();
 
 renderLib();renderMine();
 </script>
