@@ -170,7 +170,7 @@ body.sheet-open .dock{z-index:8}
 .seg-item[aria-pressed="true"]{background:var(--lamp);color:var(--night)}
 .seg-item:hover:not([aria-pressed="true"]){color:var(--moon);border-color:var(--night-3)}
 
-.player{position:fixed;inset:0;z-index:30;background:radial-gradient(120% 80% at 50% 38%,var(--night-2),var(--deep) 70%);color:var(--moon);display:flex;flex-direction:column;
+.player{position:fixed;inset:0;height:100vh;height:100dvh;min-height:-webkit-fill-available;z-index:30;background:radial-gradient(120% 80% at 50% 38%,var(--night-2),var(--deep) 70%);color:var(--moon);display:flex;flex-direction:column;
   padding-top:calc(max(16px,env(safe-area-inset-top,0px)) + 24px);padding-bottom:max(20px,env(safe-area-inset-bottom,0px));padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
 .player[hidden]{display:none!important}
 .player .ctrls,.player #showtxt{display:none!important}
@@ -262,6 +262,7 @@ body,.player,.dock,.herosheet,.settings,header,.tabs,.card,button{-webkit-user-s
 html:has(body.sheet-open),body.sheet-open{overflow:hidden;overscroll-behavior:none}
 body.sheet-open .scrim{touch-action:none}
 .hs-in{overscroll-behavior:contain;-webkit-overflow-scrolling:touch}
+html:has(.player:not([hidden])){background:var(--deep)}
 </style>
 
 <div class="sky" aria-hidden="true"></div>
