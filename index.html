@@ -265,8 +265,8 @@ html:has(body.sheet-open),body.sheet-open{overflow:hidden;overscroll-behavior:no
 body.sheet-open .scrim{touch-action:none}
 .hs-in{overscroll-behavior:contain;-webkit-overflow-scrolling:touch}
 html:has(.player:not([hidden])){background:var(--deep)}
-.ptr{position:fixed;left:50%;top:calc(env(safe-area-inset-top,0px) + 8px);z-index:50;width:44px;height:44px;margin-left:-22px;border-radius:999px;background:var(--night-2);border:2px solid var(--night-3);display:grid;place-items:center;color:var(--lamp);transform:translateY(-60px);opacity:0;pointer-events:none;will-change:transform}
-.ptr svg{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round}
+.ptr{position:fixed;left:50%;top:calc(env(safe-area-inset-top,0px) + 8px);z-index:50;width:52px;height:52px;margin-left:-26px;border-radius:999px;background:var(--night-2);border:2px solid var(--night-3);display:grid;place-items:center;color:var(--lamp);transform:translateY(-60px);opacity:0;pointer-events:none;will-change:transform}
+.ptr svg{width:40px;height:40px;fill:currentColor;stroke:none}
 .ptr.spin svg{animation:ptrspin .8s linear infinite}
 @keyframes ptrspin{to{transform:rotate(360deg)}}
 </style>
@@ -371,7 +371,7 @@ html:has(.player:not([hidden])){background:var(--deep)}
   </section>
  </div>
 </div>
-<div class="ptr" id="ptr" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M20 12a8 8 0 1 1-2.6-5.9"/><path d="M20 4v5h-5"/></svg></div>
+<div class="ptr" id="ptr" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12.00 1.90Q12.00 3.60 13.70 3.60Q12.00 3.60 12.00 5.30Q12.00 3.60 10.30 3.60Q12.00 3.60 12.00 1.90Z" opacity="0.50"/><path d="M18.24 4.26Q18.24 6.38 20.36 6.38Q18.24 6.38 18.24 8.50Q18.24 6.38 16.12 6.38Q18.24 6.38 18.24 4.26Z" opacity="0.60"/><path d="M20.35 10.34Q20.35 12.88 22.89 12.88Q20.35 12.88 20.35 15.42Q20.35 12.88 17.81 12.88Q20.35 12.88 20.35 10.34Z" opacity="0.70"/><path d="M16.94 15.84Q16.94 18.80 19.90 18.80Q16.94 18.80 16.94 21.76Q16.94 18.80 13.98 18.80Q16.94 18.80 16.94 15.84Z" opacity="0.80"/><path d="M10.25 16.84Q10.25 20.22 13.63 20.22Q10.25 20.22 10.25 23.60Q10.25 20.22 6.87 20.22Q10.25 20.22 10.25 16.84Z" opacity="0.90"/><path d="M4.73 12.40Q4.73 16.20 8.53 16.20Q4.73 16.20 4.73 20.00Q4.73 16.20 0.93 16.20Q4.73 16.20 4.73 12.40Z" opacity="1.00"/></svg></div>
 <div class="scrim" id="scrim" aria-hidden="true"></div>
 <div class="herosheet" id="herosheet" hidden>
   <div class="hs-in">
