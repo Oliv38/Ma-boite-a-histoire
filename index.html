@@ -348,7 +348,7 @@ select{font:inherit;background:var(--night);color:var(--moon);border:2px solid v
   </section>
   <section class="set-sec"><h3>Lecteur</h3>
    <div class="set-row"><label for="set-calm">Passage en mode calme après</label><select class="set-sel" id="set-calm"><option value="8">8 s</option><option value="12">12 s</option><option value="20">20 s</option><option value="30">30 s</option><option value="60">1 min</option></select></div>
-   <div class="set-row"><label for="set-target">Durée d'une soirée</label><select class="set-sel" id="set-target"><option value="10">10 min</option><option value="15">15 min</option><option value="20">20 min</option><option value="30">30 min</option><option value="45">45 min</option></select></div>
+   <div class="set-row"><label for="set-count">Histoires par soirée</label><select class="set-sel" id="set-count"><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option><option value="7">7</option><option value="8">8</option><option value="9">9</option></select></div>
   </section>
   <section class="set-sec"><h3>Favoris et infos</h3>
    <div class="set-row"><span class="l" id="set-favs"></span><button class="set-btn" id="clr-favs">Effacer</button></div>
@@ -798,7 +798,7 @@ const BUILTIN={
 /* ---------- Stockage local ---------- */
 const store={get(k,d){try{const v=localStorage.getItem(k);return v?JSON.parse(v):d}catch(e){return d}},set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}};
 let mine=store.get("mbh-mine",[]);
-const SET=Object.assign({calm:12,target:15,hcols:3},store.get("mbh-set",{}));
+const SET=Object.assign({calm:12,count:5,hcols:3},store.get("mbh-set",{}));
 function saveSet(){store.set("mbh-set",SET)}
 const textOf=s=>s.text||BUILTIN[s.id]||null;
 
@@ -1093,13 +1093,11 @@ function statusLine(mins){
  if(queue)return "Soirée · histoire "+(qi+1)+" sur "+queue.length+" · "+who;
  return "";
 }
-function buildQueue(target=SET.target){
+function buildQueue(count=SET.count){
  let pool=LIB.filter(s=>AUDIO.has(s.id)&&match(s));
  if(pool.length<2)pool=LIB.filter(s=>AUDIO.has(s.id));
  pool=fresh(pool);
- const q=[];let tot=0;
- for(const s of pool){if(tot>=target||q.length>=5)break;if(tot+s.dur>target+3&&q.length)continue;q.push(s);tot+=s.dur}
- return q;
+ return pool.slice(0,count);
 }
 function updCount(){document.querySelector(".p-count").hidden=!queue;const n=queue?queue.length-qi:1;$("cnum").textContent=n;$("cminus").disabled=n<=1;$("cplus").disabled=n>=9}
 function pickMore(){
@@ -1214,7 +1212,7 @@ function refreshSettings(){
  const heard=[...HEARD].filter(id=>LIB.some(s=>s.id===id)).length;
  $("set-heard").textContent=heard+" histoire"+(heard>1?"s":"")+" écoutée"+(heard>1?"s":"")+" sur "+LIB.length+" · "+Object.keys(POS).length+" reprise(s) enregistrée(s)";
  $("set-favs").textContent=favs.size+" favori"+(favs.size>1?"s":"");
- $("set-calm").value=String(SET.calm);$("set-target").value=String(SET.target);
+ $("set-calm").value=String(SET.calm);$("set-count").value=String(SET.count);
  $("set-about").textContent="Version du "+APP_VERSION+" · "+CHARS.length+" héros · "+LIB.length+" histoires · "+AUDIO.size+" voix";
  if(navigator.storage&&navigator.storage.estimate)navigator.storage.estimate().then(e=>{if(e.usage)$("set-about").textContent+=" · "+Math.round(e.usage/1048576)+" Mo stockés sur cet appareil"}).catch(()=>{});
  if(!$("offline").hidden)refreshOffline();
@@ -1225,7 +1223,7 @@ $("setok").onclick=closeSettings;
 $("settings").addEventListener("click",e=>{if(e.target===$("settings"))closeSettings()});
 document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!$("settings").hidden)closeSettings()});
 $("set-calm").onchange=e=>{SET.calm=+e.target.value;saveSet()};
-$("set-target").onchange=e=>{SET.target=+e.target.value;saveSet()};
+$("set-count").onchange=e=>{SET.count=+e.target.value;saveSet()};
 arm($("clr-heard"),"Confirmer ?",()=>{HEARD=new Set();store.set("mbh-heard",[]);renderLib();if(!$("herosheet").hidden)renderHeroes();refreshSettings()});
 arm($("clr-pos"),"Confirmer ?",()=>{POS={};store.set("mbh-pos",POS);refreshSettings()});
 arm($("clr-favs"),"Confirmer ?",()=>{favs=new Set();store.set("mbh-favs",[]);renderLib();renderMine();syncPlayerFav();refreshSettings()});
