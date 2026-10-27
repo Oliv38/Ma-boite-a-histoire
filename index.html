@@ -265,8 +265,8 @@ html:has(body.sheet-open),body.sheet-open{overflow:hidden;overscroll-behavior:no
 body.sheet-open .scrim{touch-action:none}
 .hs-in{overscroll-behavior:contain;-webkit-overflow-scrolling:touch}
 html:has(.player:not([hidden])){background:var(--deep)}
-.ptr{position:fixed;left:50%;top:calc(env(safe-area-inset-top,0px) + 8px);z-index:50;width:36px;height:36px;margin-left:-18px;border-radius:999px;background:none;border:0;display:grid;place-items:center;color:var(--lamp);transform:translateY(-60px);opacity:0;pointer-events:none;will-change:transform}
-.ptr svg{width:34px;height:34px;fill:var(--lamp-soft);stroke:var(--lamp-soft);stroke-width:.5;stroke-linejoin:round}
+.ptr{position:fixed;left:50%;top:calc(env(safe-area-inset-top,0px) + 8px);z-index:50;width:46px;height:46px;margin-left:-23px;border-radius:999px;background:none;border:0;display:grid;place-items:center;color:var(--lamp);transform:translateY(-60px);opacity:0;pointer-events:none;will-change:transform}
+.ptr svg{width:46px;height:46px;fill:var(--lamp-soft);stroke:none}
 .ptr.spin svg{animation:ptrspin .8s linear infinite}
 @keyframes ptrspin{to{transform:rotate(360deg)}}
 </style>
@@ -371,7 +371,7 @@ html:has(.player:not([hidden])){background:var(--deep)}
   </section>
  </div>
 </div>
-<div class="ptr" id="ptr" aria-hidden="true"><svg viewBox="0 0 24 24"><g transform="translate(12 12) scale(.82) translate(-12 -12)"><path d="M12.00 1.70L12.54 2.86L13.81 3.01L12.87 3.88L13.12 5.14L12.00 4.51L10.88 5.14L11.13 3.88L10.19 3.01L11.46 2.86Z" opacity="0.50"/><path d="M18.95 4.21L19.13 5.74L20.52 6.38L19.13 7.02L18.95 8.55L17.90 7.42L16.40 7.72L17.15 6.38L16.40 5.04L17.90 5.34Z" opacity="0.60"/><path d="M21.92 10.73L21.57 12.48L22.88 13.70L21.10 13.91L20.35 15.54L19.60 13.91L17.82 13.70L19.14 12.48L18.79 10.73L20.35 11.60Z" opacity="0.70"/><path d="M19.40 17.01L18.40 18.80L19.40 20.58L17.39 20.18L16.00 21.69L15.76 19.65L13.90 18.80L15.76 17.94L16.00 15.90L17.39 17.41Z" opacity="0.80"/><path d="M13.51 19.16L11.81 20.72L12.26 22.98L10.25 21.86L8.24 22.98L8.69 20.72L7.00 19.16L9.29 18.89L10.25 16.80L11.22 18.89Z" opacity="0.90"/><path d="M8.53 16.20L6.20 17.27L5.90 19.81L4.16 17.93L1.65 18.43L2.90 16.20L1.65 13.97L4.16 14.47L5.90 12.59L6.20 15.13Z" opacity="1.00"/></g></svg></div>
+<div class="ptr" id="ptr" aria-hidden="true"><svg viewBox="0 0 32 32"><path d="M16.00 2.10Q16.00 3.50 17.40 3.50Q16.00 3.50 16.00 4.90Q16.00 3.50 14.60 3.50Q16.00 3.50 16.00 2.10Z" opacity="0.30"/><path d="M24.03 4.66Q24.03 6.42 25.80 6.42Q24.03 6.42 24.03 8.19Q24.03 6.42 22.27 6.42Q24.03 6.42 24.03 4.66Z" opacity="0.42"/><path d="M28.31 11.70Q28.31 13.83 30.44 13.83Q28.31 13.83 28.31 15.96Q28.31 13.83 26.18 13.83Q28.31 13.83 28.31 11.70Z" opacity="0.53"/><path d="M26.83 19.75Q26.83 22.25 29.33 22.25Q26.83 22.25 26.83 24.75Q26.83 22.25 24.33 22.25Q26.83 22.25 26.83 19.75Z" opacity="0.65"/><path d="M20.28 24.88Q20.28 27.75 23.14 27.75Q20.28 27.75 20.28 30.61Q20.28 27.75 17.41 27.75Q20.28 27.75 20.28 24.88Z" opacity="0.77"/><path d="M11.72 24.51Q11.72 27.75 14.96 27.75Q11.72 27.75 11.72 30.98Q11.72 27.75 8.49 27.75Q11.72 27.75 11.72 24.51Z" opacity="0.88"/><path d="M5.17 18.65Q5.17 22.25 8.77 22.25Q5.17 22.25 5.17 25.85Q5.17 22.25 1.57 22.25Q5.17 22.25 5.17 18.65Z" opacity="1.00"/></svg></div>
 <div class="scrim" id="scrim" aria-hidden="true"></div>
 <div class="herosheet" id="herosheet" hidden>
   <div class="hs-in">
