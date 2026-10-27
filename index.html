@@ -1173,7 +1173,7 @@ audio.addEventListener("loadedmetadata",()=>{try{if(navigator.mediaSession&&navi
 audio.addEventListener("seeked",()=>{try{if(navigator.mediaSession&&navigator.mediaSession.setPositionState&&isFinite(audio.duration))navigator.mediaSession.setPositionState({duration:audio.duration,playbackRate:audio.playbackRate||1,position:audio.currentTime})}catch(e){}});
 /* Verrou parent : il faut maintenir ✕ une seconde pour fermer le lecteur */
 let holdT=0, hintT=0;
-function holdStart(e){e.preventDefault();$("stop").classList.add("holding");holdT=setTimeout(()=>{$("stop").classList.remove("holding");queue=null;stop(true)},1000)}
+function holdStart(e){e.preventDefault();$("stop").classList.add("holding");clearTimeout(hintT);$("plock").classList.add("show");holdT=setTimeout(()=>{$("stop").classList.remove("holding");$("plock").classList.remove("show");queue=null;stop(true)},1000)}
 function holdEnd(){if(!$("stop").classList.contains("holding"))return;$("stop").classList.remove("holding");clearTimeout(holdT);$("plock").classList.add("show");clearTimeout(hintT);hintT=setTimeout(()=>$("plock").classList.remove("show"),1800)}
 $("stop").addEventListener("pointerdown",holdStart);
 ["pointerup","pointerleave","pointercancel"].forEach(ev=>$("stop").addEventListener(ev,holdEnd));
