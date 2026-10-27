@@ -209,7 +209,8 @@ body.sheet-open .dock{z-index:8}
 #stop .hold{position:absolute;inset:0;width:100%;height:100%;transform:rotate(-90deg);fill:none;stroke:var(--lamp);stroke-width:3;stroke-dasharray:126;stroke-dashoffset:126;pointer-events:none}
 #stop.holding .hold{transition:stroke-dashoffset 1s linear;stroke-dashoffset:0}
 .p-lock{position:absolute;left:0;right:0;top:calc(max(16px,env(safe-area-inset-top,0px)) + 76px);text-align:center;margin:0;font-size:.85rem;color:var(--lamp-soft);opacity:0;transition:opacity .3s;pointer-events:none}
-.player>.p-lock{position:absolute;z-index:6;left:50%;right:auto;transform:translateX(-50%);width:max-content;max-width:calc(100% - 32px);padding:8px 16px;border-radius:999px;background:rgba(9,12,34,.92);border:1px solid var(--night-3);font-weight:700;top:calc(max(16px,env(safe-area-inset-top,0px)) + 24px + 54px)}
+.player>.p-lock{position:absolute;z-index:6;top:calc(max(16px,env(safe-area-inset-top,0px)) + 24px);left:calc(max(16px,env(safe-area-inset-left,0px)) + 52px);right:auto;transform:none;width:auto;max-width:calc(100% - 2*(max(16px,env(safe-area-inset-left,0px)) + 52px));height:44px;display:flex;align-items:center;padding:0 14px;border-radius:999px;background:rgba(9,12,34,.92);border:1px solid var(--night-3);font-weight:700;font-size:.78rem;line-height:1.15;text-align:left}
+.player:has(.p-lock.show) .p-count{opacity:0}
 .p-lock.show{opacity:1}
 .nightfall{position:absolute;inset:0;background:#000;opacity:0;pointer-events:none;transition:opacity 8s ease;z-index:5!important}
 .player.night .nightfall{opacity:.96}
