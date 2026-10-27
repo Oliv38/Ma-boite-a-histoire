@@ -156,6 +156,9 @@ input[type=text]{width:100%;font:inherit;padding:10px 14px;border-radius:12px;bo
 .offline .sbtn{padding:10px 16px;font-size:.95rem}
 .mine-title{font:700 1.2rem var(--display);margin:26px 0 10px}
 /* Lecteur */
+.scrim{position:fixed;inset:0;z-index:7;background:rgba(4,7,22,.6);opacity:0;pointer-events:none;transition:opacity .25s ease}
+body.sheet-open .scrim{opacity:1}
+body.sheet-open .dock{z-index:8}
 .dock{position:fixed;left:0;right:0;bottom:0;z-index:5;display:flex;flex-direction:column;padding-bottom:env(safe-area-inset-bottom,0px);background:var(--night-2);border-top:2px solid var(--night-3)}
 .dial{display:flex;gap:10px;align-items:center;padding-block:10px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));max-width:560px;width:100%;margin:0 auto}
 .dial[hidden]{display:none!important}
@@ -300,6 +303,7 @@ select{font:inherit;background:var(--night);color:var(--moon);border:2px solid v
 <button class="shuffle soiree" id="soiree" aria-label="Soirée : enchaîner des histoires pendant environ 15 minutes">
   <svg class="sh-play" viewBox="0 0 24 24" aria-hidden="true" style="margin:0"><path d="M14.5 3.2a8.8 8.8 0 1 0 6.3 12.3 7 7 0 0 1-6.3-12.3z"/></svg>
 </button>
+<div class="scrim" id="scrim" aria-hidden="true"></div>
 <div class="herosheet" id="herosheet" hidden>
   <div class="hs-in">
     <div class="hs-head"><p class="hs-title">Filtres</p><span class="hs-actions"><button class="hs-link" id="hsclear" hidden>Effacer</button><button class="hs-ok" id="hsok">OK</button></span></div>
@@ -838,8 +842,8 @@ function syncHeroBtn(){
  $("herobtn").setAttribute("aria-label","Filtres : "+(n?[...ids.map(i=>C[i].n),...THEMES.filter(t=>themes.has(t[0])).map(t=>t[1])].join(", "):"aucun"));
  $("hsclear").hidden=!n;
 }
-function openHeroes(){renderThemes();renderHeroes();$("herosheet").hidden=false;$("herobtn").setAttribute("aria-expanded",true);const sel=$("hsgrid").querySelector('[aria-pressed="true"]');sel&&sel.focus()}
-function closeHeroes(){$("herosheet").hidden=true;$("herobtn").setAttribute("aria-expanded",false)}
+function openHeroes(){renderThemes();renderHeroes();$("herosheet").hidden=false;document.body.classList.add("sheet-open");$("herobtn").setAttribute("aria-expanded",true);const sel=$("hsgrid").querySelector('[aria-pressed="true"]');sel&&sel.focus()}
+function closeHeroes(){$("herosheet").hidden=true;document.body.classList.remove("sheet-open");$("herobtn").setAttribute("aria-expanded",false)}
 $("hsok").onclick=()=>{closeHeroes();$("herobtn").focus()};
 $("hsclear").onclick=()=>{heroes.clear();themes.clear();renderThemes();renderHeroes();syncHeroBtn();renderLib()};
 $("herobtn").onclick=()=>$("herosheet").hidden?openHeroes():closeHeroes();
