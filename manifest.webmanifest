@@ -3,6 +3,7 @@
  "short_name": "Histoires",
  "start_url": "./",
  "display": "standalone",
+ "orientation": "portrait",
  "background_color": "#141a3a",
  "theme_color": "#141a3a",
  "lang": "fr",

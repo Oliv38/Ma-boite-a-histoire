@@ -273,6 +273,14 @@ html:has(.player:not([hidden])){background:var(--deep)}
 .settings{padding:max(16px,env(safe-area-inset-top,0px)) 16px max(16px,env(safe-area-inset-bottom,0px));overscroll-behavior:contain}
 .set-box{max-height:calc(100vh - 32px);max-height:calc(100dvh - max(16px,env(safe-area-inset-top,0px)) - max(16px,env(safe-area-inset-bottom,0px)));overflow-y:auto;-webkit-overflow-scrolling:touch;overscroll-behavior:contain;touch-action:pan-y}
 html:has(.settings:not([hidden])),body:has(.settings:not([hidden])){overflow:hidden}
+/* Portrait uniquement : en paysage sur téléphone, on masque l'app derrière une invitation à tourner l'écran */
+.rotate{display:none}
+@media (orientation:landscape) and (max-height:540px) and (pointer:coarse){
+ .rotate{display:grid;position:fixed;inset:0;z-index:999;place-items:center;align-content:center;gap:14px;background:var(--deep);color:var(--lamp-soft);text-align:center;padding:24px;font:700 1.05rem var(--display)}
+ .rotate svg{width:56px;height:56px;fill:none;stroke:var(--lamp);stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;animation:rot 2.4s ease-in-out infinite}
+ html,body{overflow:hidden}
+}
+@keyframes rot{0%,30%{transform:rotate(-90deg)}60%,100%{transform:rotate(0)}}
 </style>
 
 <div class="sky" aria-hidden="true"></div>
@@ -374,6 +382,7 @@ html:has(.settings:not([hidden])),body:has(.settings:not([hidden])){overflow:hid
   </section>
  </div>
 </div>
+<div class="rotate" aria-live="polite"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="7" y="2.5" width="10" height="19" rx="2.2"/><path d="M11 18.5h2"/></svg><p style="margin:0">Tourne ton téléphone<br>pour écouter les histoires</p></div>
 <div class="ptr" id="ptr" aria-hidden="true"><svg viewBox="0 0 32 32"><path d="M16.00 2.10Q16.00 3.50 17.40 3.50Q16.00 3.50 16.00 4.90Q16.00 3.50 14.60 3.50Q16.00 3.50 16.00 2.10Z" opacity="0.30"/><path d="M24.03 4.66Q24.03 6.42 25.80 6.42Q24.03 6.42 24.03 8.19Q24.03 6.42 22.27 6.42Q24.03 6.42 24.03 4.66Z" opacity="0.42"/><path d="M28.31 11.70Q28.31 13.83 30.44 13.83Q28.31 13.83 28.31 15.96Q28.31 13.83 26.18 13.83Q28.31 13.83 28.31 11.70Z" opacity="0.53"/><path d="M26.83 19.75Q26.83 22.25 29.33 22.25Q26.83 22.25 26.83 24.75Q26.83 22.25 24.33 22.25Q26.83 22.25 26.83 19.75Z" opacity="0.65"/><path d="M20.28 24.88Q20.28 27.75 23.14 27.75Q20.28 27.75 20.28 30.61Q20.28 27.75 17.41 27.75Q20.28 27.75 20.28 24.88Z" opacity="0.77"/><path d="M11.72 24.51Q11.72 27.75 14.96 27.75Q11.72 27.75 11.72 30.98Q11.72 27.75 8.49 27.75Q11.72 27.75 11.72 24.51Z" opacity="0.88"/><path d="M5.17 18.65Q5.17 22.25 8.77 22.25Q5.17 22.25 5.17 25.85Q5.17 22.25 1.57 22.25Q5.17 22.25 5.17 18.65Z" opacity="1.00"/></svg></div>
 <div class="scrim" id="scrim" aria-hidden="true"></div>
 <div class="herosheet" id="herosheet" hidden>
@@ -1223,7 +1232,7 @@ $("dlall").onclick=async()=>{
 };
 
 /* Réglages : triple toucher sur le logo */
-const APP_VERSION="105";
+const APP_VERSION="106";
 let logoTaps=[];
 document.querySelector(".logo").addEventListener("click",()=>{const t=Date.now();logoTaps=logoTaps.filter(x=>t-x<800);logoTaps.push(t);if(logoTaps.length>=3){logoTaps=[];openSettings()}});
 function arm(btn,label,fn){let t=0;const base=btn.textContent;btn.onclick=()=>{if(t){clearTimeout(t);t=0;btn.classList.remove("arm");btn.textContent=base;fn();return}btn.classList.add("arm");btn.textContent=label;t=setTimeout(()=>{t=0;btn.classList.remove("arm");btn.textContent=base},3000)}}
@@ -1280,6 +1289,9 @@ document.addEventListener("touchmove",e=>{if(document.body.classList.contains("s
   dy=0};
  window.addEventListener("touchend",end,{passive:true});window.addEventListener("touchcancel",end,{passive:true});
 })();
+
+// Android / applis installées : tente de verrouiller l'orientation (sans effet sur iPhone)
+try{screen.orientation&&screen.orientation.lock&&screen.orientation.lock("portrait").catch(()=>{})}catch(e){}
 
 renderLib();renderMine();
 </script>
