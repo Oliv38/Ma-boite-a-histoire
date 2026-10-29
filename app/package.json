@@ -1,0 +1,9 @@
+{
+  "name": "ma-boite-a-histoires-app",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Application mobile Ma boîte à histoires (Capacitor) — tout est embarqué : page, voix MP3, illustrations",
+  "scripts": {
+    "www": "bash build_www.sh"
+  }
+}

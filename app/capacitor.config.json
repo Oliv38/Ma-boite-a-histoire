@@ -1,0 +1,7 @@
+{
+  "appId": "fr.oliv38.boiteahistoires",
+  "appName": "Ma boîte à histoires",
+  "webDir": "www",
+  "backgroundColor": "#141a3a",
+  "android": { "allowMixedContent": false }
+}

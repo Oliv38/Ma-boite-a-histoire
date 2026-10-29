@@ -1259,7 +1259,9 @@ document.addEventListener("keydown",e=>{if(!$("player").hidden){if($("player").c
 const MEDIA_CACHE="mbh-media-v1";
 async function offlineCount(){try{const c=await caches.open(MEDIA_CACHE);const keys=await c.keys();return keys.filter(k=>/\/audio\//.test(k.url)).length}catch(e){return 0}}
 async function refreshOffline(){const n=await offlineCount();const tot=AUDIO.size;$("dlstat").textContent=n>=tot?"Toutes les histoires sont disponibles hors connexion.":n+" / "+tot+" histoires disponibles hors connexion. Les histoires écoutées sont gardées automatiquement.";$("dlall").hidden=n>=tot}
-if("serviceWorker" in navigator&&location.protocol==="https:"){
+const IS_APP=!!(window.Capacitor&&window.Capacitor.isNativePlatform&&window.Capacitor.isNativePlatform());
+if(IS_APP){$("offno").textContent="Toutes les histoires sont déjà dans l'application : elles fonctionnent sans Internet.";}
+else if("serviceWorker" in navigator&&location.protocol==="https:"){
  navigator.serviceWorker.register("sw.js").then(()=>{$("offline").hidden=false;$("offno").hidden=true;refreshOffline()}).catch(()=>{});
 }
 $("dlall").onclick=async()=>{
@@ -1275,7 +1277,7 @@ $("dlall").onclick=async()=>{
 };
 
 /* Réglages : triple toucher sur le logo */
-const APP_VERSION="108";
+const APP_VERSION="109";
 let logoTaps=[];
 document.querySelector(".logo").addEventListener("click",()=>{const t=Date.now();logoTaps=logoTaps.filter(x=>t-x<800);logoTaps.push(t);if(logoTaps.length>=3){logoTaps=[];openSettings()}});
 function arm(btn,label,fn){let t=0;const base=btn.textContent;btn.onclick=()=>{if(t){clearTimeout(t);t=0;btn.classList.remove("arm");btn.textContent=base;fn();return}btn.classList.add("arm");btn.textContent=label;t=setTimeout(()=>{t=0;btn.classList.remove("arm");btn.textContent=base},3000)}}
