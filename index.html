@@ -317,6 +317,9 @@ html:has(.settings:not([hidden])),body:has(.settings:not([hidden])){overflow:hid
  body.sheet-open .shuffle{opacity:0;pointer-events:none}
  .player .text:not([hidden]){max-height:30vh;overflow:auto}
 }
+.player{overscroll-behavior:none;touch-action:none}
+.player #text{touch-action:pan-y;overscroll-behavior:contain}
+.player .bar{touch-action:none}
 </style>
 
 <div class="sky" aria-hidden="true"></div>
@@ -1085,7 +1088,7 @@ if(synth){loadVoices();synth.onvoiceschanged=loadVoices}
 
 function showPlayer(s,status){
  stop(false);
- $("player").hidden=false;document.body.style.overflow="hidden";$("pemoji").innerHTML=ILLUS.has(s.id)?`<img src="illus/${s.id}.webp" alt="">`:(C[s.char]?hico(s.char):"");$("pmoon").classList.toggle("has-img",ILLUS.has(s.id));$("ptitle").textContent=s.title;syncPlayerFav();updCount();setMeta();wake();$("pstat").classList.remove("err");$("pstat").textContent=status||"";
+ $("player").hidden=false;lockPage();$("pemoji").innerHTML=ILLUS.has(s.id)?`<img src="illus/${s.id}.webp" alt="">`:(C[s.char]?hico(s.char):"");$("pmoon").classList.toggle("has-img",ILLUS.has(s.id));$("ptitle").textContent=s.title;syncPlayerFav();updCount();setMeta();wake();$("pstat").classList.remove("err");$("pstat").textContent=status||"";
  $("text").replaceChildren();$("bar").style.width="0";
 }
 function showText(t){
@@ -1145,7 +1148,12 @@ function play(){
  }},3000);
 }
 function pause(){playing=false;gen++;setIcon();if(mode==="audio"){audio.pause();return}synth&&synth.cancel()}
-function stop(hide=true){audio.pause();mode="speech";$("voice").hidden=false;$("voice").previousElementSibling.hidden=false;playing=false;sentences=[];idx=0;synth&&synth.cancel();setIcon();if(hide){$("player").hidden=true;document.body.style.overflow="";$("player").classList.remove("calm");clearTimeout(calmT);current=null;renderLib();renderMine();if(typeof syncSystem==="function")syncSystem()}}
+/* Lecteur ouvert : la page derrière est figée (y compris sur iPhone, qui ignore overflow:hidden au toucher) */
+let lockY=null;
+function lockPage(){if(lockY!==null)return;lockY=window.scrollY;const b=document.body.style;b.position="fixed";b.top=(-lockY)+"px";b.left="0";b.right="0";b.width="100%";b.overflow="hidden"}
+function unlockPage(){if(lockY===null)return;const b=document.body.style;b.position=b.top=b.left=b.right=b.width=b.overflow="";window.scrollTo(0,lockY);lockY=null}
+document.addEventListener("touchmove",e=>{if(!$("player").hidden&&!(e.target.closest&&e.target.closest("#text")))e.preventDefault()},{passive:false});
+function stop(hide=true){audio.pause();mode="speech";$("voice").hidden=false;$("voice").previousElementSibling.hidden=false;playing=false;sentences=[];idx=0;synth&&synth.cancel();setIcon();if(hide){$("player").hidden=true;unlockPage();$("player").classList.remove("calm");clearTimeout(calmT);current=null;renderLib();renderMine();if(typeof syncSystem==="function")syncSystem()}}
 function setIcon(){$("pico").innerHTML=playing?'<path d="M6 4h4v16H6zM14 4h4v16h-4z"/>':'<path d="M7 4v16l13-8z"/>';$("play").setAttribute("aria-label",playing?"Pause":"Lecture");if(typeof wake==="function"&&!$("player").hidden)wake();if(typeof syncSystem==="function")syncSystem()}
 $("play").onclick=()=>playing?pause():play();
 /* Soirée : enchaîne des histoires (~15 min) puis fondu au noir */
@@ -1267,7 +1275,7 @@ $("dlall").onclick=async()=>{
 };
 
 /* Réglages : triple toucher sur le logo */
-const APP_VERSION="107";
+const APP_VERSION="108";
 let logoTaps=[];
 document.querySelector(".logo").addEventListener("click",()=>{const t=Date.now();logoTaps=logoTaps.filter(x=>t-x<800);logoTaps.push(t);if(logoTaps.length>=3){logoTaps=[];openSettings()}});
 function arm(btn,label,fn){let t=0;const base=btn.textContent;btn.onclick=()=>{if(t){clearTimeout(t);t=0;btn.classList.remove("arm");btn.textContent=base;fn();return}btn.classList.add("arm");btn.textContent=label;t=setTimeout(()=>{t=0;btn.classList.remove("arm");btn.textContent=base},3000)}}
