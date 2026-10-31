@@ -170,7 +170,7 @@ body.sheet-open .dock{z-index:8}
 .seg-item[aria-pressed="true"]{background:var(--lamp);color:var(--night)}
 .seg-item:hover:not([aria-pressed="true"]){color:var(--moon);border-color:var(--night-3)}
 
-.player{position:fixed;inset:0;height:100vh;height:100dvh;min-height:-webkit-fill-available;z-index:30;background:radial-gradient(120% 80% at 50% 38%,var(--night-2),var(--deep) 70%);color:var(--moon);display:flex;flex-direction:column;
+.player{position:fixed;inset:0;height:auto;z-index:30;background:radial-gradient(120% 80% at 50% 38%,var(--night-2),var(--deep) 70%);color:var(--moon);display:flex;flex-direction:column;
   padding-top:calc(max(16px,env(safe-area-inset-top,0px)) + 24px);padding-bottom:max(20px,env(safe-area-inset-bottom,0px));padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
 .player[hidden]{display:none!important}
 .player .ctrls,.player #showtxt{display:none!important}
@@ -266,7 +266,7 @@ body,.player,.dock,.herosheet,.settings,header,.tabs,.card,button{-webkit-user-s
 html:has(body.sheet-open),body.sheet-open{overflow:hidden;overscroll-behavior:none}
 body.sheet-open .scrim{touch-action:none}
 
-html:has(.player:not([hidden])){background:var(--deep)}
+html:has(.player:not([hidden])){background:var(--deep)}body:has(.player:not([hidden])) .dock{visibility:hidden}
 .ptr{position:fixed;left:50%;top:calc(env(safe-area-inset-top,0px) + 8px);z-index:50;width:46px;height:46px;margin-left:-23px;border-radius:999px;background:none;border:0;display:grid;place-items:center;color:var(--lamp);transform:translateY(-60px);opacity:0;pointer-events:none;will-change:transform}
 .ptr svg{width:46px;height:46px;fill:var(--lamp-soft);stroke:none}
 .ptr.spin svg{animation:ptrspin .8s linear infinite}
@@ -1348,7 +1348,7 @@ $("dlall").onclick=async()=>{
 };
 
 /* Réglages : triple toucher sur le logo */
-const APP_VERSION="114";
+const APP_VERSION="115";
 let logoTaps=[];
 document.querySelector(".logo").addEventListener("click",()=>{const t=Date.now();logoTaps=logoTaps.filter(x=>t-x<800);logoTaps.push(t);if(logoTaps.length>=3){logoTaps=[];openSettings()}});
 function arm(btn,label,fn){let t=0;const base=btn.textContent;btn.onclick=()=>{if(t){clearTimeout(t);t=0;btn.classList.remove("arm");btn.textContent=base;fn();return}btn.classList.add("arm");btn.textContent=label;t=setTimeout(()=>{t=0;btn.classList.remove("arm");btn.textContent=base},3000)}}
