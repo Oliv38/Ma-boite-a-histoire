@@ -104,7 +104,7 @@ button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid 
 .card.playing{border-color:var(--lamp)}
 .av{width:48px;height:48px;flex:none;border-radius:50%;display:grid;place-items:center;background:var(--night-3);--icbg:var(--night-3)}
 .av .hemo{font-size:1.6rem;line-height:1}
-.av.pic{width:72px;height:72px;border-radius:16px;overflow:hidden;background:var(--night)}
+.av.pic{width:96px;height:96px;margin-bottom:-22px;border-radius:18px;overflow:hidden;background:var(--night)}
 .av.pic img{width:100%;height:100%;object-fit:cover;display:block}
 .hico{fill:var(--lamp);color:var(--lamp);overflow:visible;display:block}
 .hico .d{fill:var(--icbg,var(--night))}
@@ -124,7 +124,7 @@ button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid 
 .card h3{font:700 1.05rem/1.2 var(--display);margin:0 0 3px;text-wrap:balance}
 .card p{margin:0;color:var(--muted);font-size:.88rem;line-height:1.35}
 .card{position:relative;padding-bottom:34px}
-.card .heard-badge{position:absolute;left:72px;top:72px;width:18px;height:18px;border-radius:50%;background:var(--lamp);border:2px solid var(--night-2);display:grid;place-items:center;pointer-events:none;z-index:1}
+.card .heard-badge{position:absolute;left:96px;top:96px;width:18px;height:18px;border-radius:50%;background:var(--lamp);border:2px solid var(--night-2);display:grid;place-items:center;pointer-events:none;z-index:1}
 .heard-badge svg{width:10px;height:10px;fill:none;stroke:var(--night);stroke-width:3.6;stroke-linecap:round;stroke-linejoin:round}
 .card:has(.card-main:focus-visible){outline:3px solid var(--lamp-soft);outline-offset:2px}
 .card .dur{position:absolute;right:12px;bottom:10px;font-size:.78rem;white-space:nowrap}
@@ -1277,7 +1277,7 @@ $("dlall").onclick=async()=>{
 };
 
 /* Réglages : triple toucher sur le logo */
-const APP_VERSION="109";
+const APP_VERSION="110";
 let logoTaps=[];
 document.querySelector(".logo").addEventListener("click",()=>{const t=Date.now();logoTaps=logoTaps.filter(x=>t-x<800);logoTaps.push(t);if(logoTaps.length>=3){logoTaps=[];openSettings()}});
 function arm(btn,label,fn){let t=0;const base=btn.textContent;btn.onclick=()=>{if(t){clearTimeout(t);t=0;btn.classList.remove("arm");btn.textContent=base;fn();return}btn.classList.add("arm");btn.textContent=label;t=setTimeout(()=>{t=0;btn.classList.remove("arm");btn.textContent=base},3000)}}
