@@ -1348,7 +1348,7 @@ $("dlall").onclick=async()=>{
 };
 
 /* Réglages : triple toucher sur le logo */
-const APP_VERSION="115";
+const APP_VERSION="116";
 let logoTaps=[];
 document.querySelector(".logo").addEventListener("click",()=>{const t=Date.now();logoTaps=logoTaps.filter(x=>t-x<800);logoTaps.push(t);if(logoTaps.length>=3){logoTaps=[];openSettings()}});
 function arm(btn,label,fn){let t=0;const base=btn.textContent;btn.onclick=()=>{if(t){clearTimeout(t);t=0;btn.classList.remove("arm");btn.textContent=base;fn();return}btn.classList.add("arm");btn.textContent=label;t=setTimeout(()=>{t=0;btn.classList.remove("arm");btn.textContent=base},3000)}}
@@ -1408,5 +1408,6 @@ document.addEventListener("touchmove",e=>{if(document.body.classList.contains("s
 
 renderLib();renderMine();
 </script>
+<div id="dbg" style="position:fixed;z-index:99;top:2px;left:0;right:0;text-align:center;font:10px/1.2 monospace;color:#ff0;pointer-events:none"></div><script>/*DEBUG-TEMP v116 : à retirer*/(function(){var d=document.getElementById("dbg");function u(){var p=document.getElementById("player"),r=p?p.getBoundingClientRect():{},v=window.visualViewport||{},c=document.documentElement;d.textContent="ih "+innerHeight+" ch "+c.clientHeight+" vv "+Math.round(v.height||0)+" sh "+screen.height+" pb "+Math.round(r.bottom||0)+" ph "+Math.round(r.height||0)+" sc "+Math.round(scrollY)+" "+(navigator.standalone?"PWA":"web")}setInterval(u,500);u()})()</script>
 </body>
 </html>
