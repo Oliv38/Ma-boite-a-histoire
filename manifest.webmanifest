@@ -3,8 +3,8 @@
  "short_name": "Histoires",
  "start_url": "./",
  "display": "standalone",
- "background_color": "#141a3a",
- "theme_color": "#141a3a",
+ "background_color": "#090c22",
+ "theme_color": "#090c22",
  "lang": "fr",
  "icons": [
   {

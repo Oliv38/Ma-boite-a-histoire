@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="description" content="Des histoires du soir lues à voix haute pour les enfants.">
-<meta name="theme-color" content="#141a3a">
+<meta name="theme-color" content="#090c22">
 <link rel="icon" type="image/svg+xml" href="favicon.svg?v=3">
 <link rel="icon" type="image/png" sizes="32x32" href="icon-32.png?v=3">
 <link rel="apple-touch-icon" href="apple-touch-icon.png?v=3">
@@ -27,7 +27,8 @@
   color-scheme:dark;
 }
 *{box-sizing:border-box}
-body{background:var(--night);color:var(--moon);font-family:var(--body);font-size:16px;line-height:1.5}
+html{background:var(--deep)}body{background:transparent;color:var(--moon);font-family:var(--body);font-size:16px;line-height:1.5}
+body::before{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;background:radial-gradient(120% 80% at 50% 38%,var(--night-2),var(--deep) 70%)}
 /* Ciel étoilé : deux couches de petites étoiles, la seconde scintille doucement */
 .sky{position:fixed;inset:0;pointer-events:none;z-index:0;background-image:radial-gradient(1.3px 1.3px at 33% 16%,rgba(255,255,255,0.38) 50%,transparent 51%),radial-gradient(1.0px 1.0px at 53% 37%,rgba(255,255,255,0.53) 50%,transparent 51%),radial-gradient(1.0px 1.0px at 6% 44%,rgba(255,255,255,0.38) 50%,transparent 51%),radial-gradient(1.0px 1.0px at 43% 81%,rgba(255,255,255,0.43) 50%,transparent 51%),radial-gradient(1.2px 1.2px at 62% 93%,rgba(255,255,255,0.49) 50%,transparent 51%),radial-gradient(1.3px 1.3px at 96% 6%,rgba(255,255,255,0.45) 50%,transparent 51%),radial-gradient(1.1px 1.1px at 16% 13%,rgba(255,255,255,0.64) 50%,transparent 51%),radial-gradient(1.3px 1.3px at 19% 58%,rgba(255,255,255,0.48) 50%,transparent 51%),radial-gradient(1.0px 1.0px at 55% 8%,rgba(255,255,255,0.42) 50%,transparent 51%),radial-gradient(1.1px 1.1px at 67% 43%,rgba(255,255,255,0.55) 50%,transparent 51%),radial-gradient(1.3px 1.3px at 46% 31%,rgba(255,255,255,0.59) 50%,transparent 51%),radial-gradient(1.2px 1.2px at 25% 57%,rgba(255,255,255,0.66) 50%,transparent 51%),radial-gradient(1.4px 1.4px at 72% 30%,rgba(255,255,255,0.39) 50%,transparent 51%),radial-gradient(1.1px 1.1px at 42% 75%,rgba(255,255,255,0.52) 50%,transparent 51%);background-size:260px 260px}
 .sky::after{content:"";position:absolute;inset:0;background-image:radial-gradient(2.1px 2.1px at 6% 66%,rgba(255,255,255,0.70) 50%,transparent 51%),radial-gradient(2.0px 2.0px at 86% 32%,rgba(255,255,255,0.71) 50%,transparent 51%),radial-gradient(2.1px 2.1px at 58% 46%,rgba(255,255,255,0.83) 50%,transparent 51%),radial-gradient(1.6px 1.6px at 48% 66%,rgba(255,255,255,0.75) 50%,transparent 51%),radial-gradient(2.1px 2.1px at 64% 97%,rgba(255,255,255,0.60) 50%,transparent 51%),radial-gradient(1.6px 1.6px at 39% 66%,rgba(255,255,255,0.66) 50%,transparent 51%),radial-gradient(1.6px 1.6px at 18% 13%,rgba(255,255,255,0.77) 50%,transparent 51%),radial-gradient(1.8px 1.8px at 14% 26%,rgba(255,255,255,0.80) 50%,transparent 51%);background-size:410px 410px;animation:twinkle 5s ease-in-out infinite alternate}
@@ -162,7 +163,7 @@ input[type=text]{width:100%;font:inherit;padding:10px 14px;border-radius:12px;bo
 .scrim{position:fixed;inset:0;z-index:1;background:rgba(4,7,22,.6);opacity:0;pointer-events:none;transition:opacity .25s ease}
 body.sheet-open .scrim{opacity:1}
 body.sheet-open .dock{z-index:8}
-.dock{position:fixed;left:0;right:0;bottom:0;z-index:5;display:flex;flex-direction:column;padding-bottom:env(safe-area-inset-bottom,0px);background:var(--night-2);border-top:2px solid var(--night-3)}
+.dock{position:fixed;left:0;right:0;bottom:0;z-index:5;display:flex;flex-direction:column;padding-bottom:env(safe-area-inset-bottom,0px);background:var(--deep);border-top:2px solid var(--night-3)}
 .dial{display:flex;gap:10px;align-items:center;padding-block:10px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));max-width:560px;width:100%;margin:0 auto}
 .dial[hidden]{display:none!important}
 .seg{flex:1;min-width:0;display:grid;grid-template-columns:repeat(3,1fr);gap:6px}
@@ -1348,7 +1349,7 @@ $("dlall").onclick=async()=>{
 };
 
 /* Réglages : triple toucher sur le logo */
-const APP_VERSION="119";
+const APP_VERSION="120";
 let logoTaps=[];
 document.querySelector(".logo").addEventListener("click",()=>{const t=Date.now();logoTaps=logoTaps.filter(x=>t-x<800);logoTaps.push(t);if(logoTaps.length>=3){logoTaps=[];openSettings()}});
 function arm(btn,label,fn){let t=0;const base=btn.textContent;btn.onclick=()=>{if(t){clearTimeout(t);t=0;btn.classList.remove("arm");btn.textContent=base;fn();return}btn.classList.add("arm");btn.textContent=label;t=setTimeout(()=>{t=0;btn.classList.remove("arm");btn.textContent=base},3000)}}
