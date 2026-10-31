@@ -214,6 +214,8 @@ body.sheet-open .dock{z-index:8}
 .p-lock.show{opacity:1}
 .nightfall{position:absolute;inset:0;background:#000;opacity:0;pointer-events:none;transition:opacity 8s ease;z-index:5!important}
 .player.night .nightfall{opacity:.96}
+.card.has-prog .av.pic{width:84px;height:84px;margin-bottom:-10px}
+.card.has-prog .heard-badge{left:84px;top:84px}
 .card.has-prog::after{content:"";position:absolute;left:14px;right:96px;bottom:12px;height:4px;border-radius:2px;background:linear-gradient(90deg,var(--lamp) var(--prog),color-mix(in srgb,var(--moon) 14%,transparent) var(--prog));pointer-events:none}
 .p-moon.has-img{flex:none;transition:width .6s ease-out;width:min(74vw,340px);border-radius:32px;background:none;padding:0;overflow:hidden;box-shadow:0 0 0 6px color-mix(in srgb,var(--lamp) 14%,transparent),0 20px 60px rgba(0,0,0,.45)}
 .p-moon.has-img #pemoji,.p-moon.has-img #pemoji img{display:block;width:100%;height:100%;object-fit:cover}
@@ -1277,7 +1279,7 @@ $("dlall").onclick=async()=>{
 };
 
 /* Réglages : triple toucher sur le logo */
-const APP_VERSION="110";
+const APP_VERSION="111";
 let logoTaps=[];
 document.querySelector(".logo").addEventListener("click",()=>{const t=Date.now();logoTaps=logoTaps.filter(x=>t-x<800);logoTaps.push(t);if(logoTaps.length>=3){logoTaps=[];openSettings()}});
 function arm(btn,label,fn){let t=0;const base=btn.textContent;btn.onclick=()=>{if(t){clearTimeout(t);t=0;btn.classList.remove("arm");btn.textContent=base;fn();return}btn.classList.add("arm");btn.textContent=label;t=setTimeout(()=>{t=0;btn.classList.remove("arm");btn.textContent=base},3000)}}
