@@ -1,6 +1,8 @@
 const SHELL="mbh-shell-v1", MEDIA="mbh-media-v1";
 self.addEventListener("install",e=>{e.waitUntil(caches.open(SHELL).then(c=>c.addAll(["./","index.html","manifest.webmanifest","favicon.svg","apple-touch-icon.png"])).then(()=>self.skipWaiting()))});
-self.addEventListener("activate",e=>{e.waitUntil(caches.keys().then(ks=>Promise.all(ks.filter(k=>k.startsWith("mbh-shell-")&&k!==SHELL).map(k=>caches.delete(k)))).then(()=>self.clients.claim()))});
+// MP3 remplacés depuis leur première publication : purgés du cache média à l'activation (re-téléchargés à la demande)
+const REFRESH=["audio/b89.mp3"];
+self.addEventListener("activate",e=>{e.waitUntil(caches.keys().then(ks=>Promise.all(ks.filter(k=>k.startsWith("mbh-shell-")&&k!==SHELL).map(k=>caches.delete(k)))).then(()=>caches.open(MEDIA)).then(c=>c.keys().then(rs=>Promise.all(rs.filter(r=>REFRESH.some(f=>new URL(r.url).pathname.endsWith("/"+f))).map(r=>c.delete(r))))).then(()=>self.clients.claim()))});
 self.addEventListener("fetch",e=>{
  const r=e.request;if(r.method!=="GET")return;
  const u=new URL(r.url);if(u.origin!==location.origin)return;
