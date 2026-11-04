@@ -164,6 +164,7 @@ input[type=text]{width:100%;font:inherit;padding:10px 14px;border-radius:12px;bo
 body.sheet-open .scrim{opacity:1}
 body.sheet-open .dock{z-index:8}
 .dock{position:fixed;left:0;right:0;bottom:0;z-index:5;display:flex;flex-direction:column;padding-bottom:env(safe-area-inset-bottom,0px);background:var(--deep);border-top:2px solid var(--night-3)}
+.dock::after{content:"";position:absolute;left:0;right:0;top:100%;height:240px;background:var(--deep);pointer-events:none}
 .dial{display:flex;gap:10px;align-items:center;padding-block:10px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));max-width:560px;width:100%;margin:0 auto}
 .dial[hidden]{display:none!important}
 .seg{flex:1;min-width:0;display:grid;grid-template-columns:repeat(3,1fr);gap:6px}
@@ -1347,7 +1348,7 @@ $("dlall").onclick=async()=>{
 };
 
 /* Réglages : triple toucher sur le logo */
-const APP_VERSION="159";
+const APP_VERSION="160";
 let logoTaps=[];
 document.querySelector(".logo").addEventListener("click",()=>{const t=Date.now();logoTaps=logoTaps.filter(x=>t-x<800);logoTaps.push(t);if(logoTaps.length>=3){logoTaps=[];openSettings()}});
 function arm(btn,label,fn){let t=0;const base=btn.textContent;btn.onclick=()=>{if(t){clearTimeout(t);t=0;btn.classList.remove("arm");btn.textContent=base;fn();return}btn.classList.add("arm");btn.textContent=label;t=setTimeout(()=>{t=0;btn.classList.remove("arm");btn.textContent=base},3000)}}
