@@ -1129,8 +1129,6 @@ function startAudio(s){
 audio.ontimeupdate=()=>{
  if(mode!=="audio"||!audio.duration||seeking)return;
  const f=audio.currentTime/audio.duration, rem=audio.duration-audio.currentTime;
- // Fondu sonore sur les dernières secondes de la dernière histoire
- audio.volume=(!queue||qi>=queue.length-1)&&rem<6?Math.max(0,rem/6):1;
  const now=Date.now();if(current&&now-lastSave>2500&&audio.currentTime>5){lastSave=now;savePos(current.id,rem>12?{t:Math.round(audio.currentTime),f:+f.toFixed(3)}:null);if(rem<=12)markHeard(current.id)}
  if(resumed){$("pstat").textContent="Reprise à "+resumed;resumed=""}
  $("bar").style.width=(f*100)+"%";
@@ -1349,7 +1347,7 @@ $("dlall").onclick=async()=>{
 };
 
 /* Réglages : triple toucher sur le logo */
-const APP_VERSION="158";
+const APP_VERSION="159";
 let logoTaps=[];
 document.querySelector(".logo").addEventListener("click",()=>{const t=Date.now();logoTaps=logoTaps.filter(x=>t-x<800);logoTaps.push(t);if(logoTaps.length>=3){logoTaps=[];openSettings()}});
 function arm(btn,label,fn){let t=0;const base=btn.textContent;btn.onclick=()=>{if(t){clearTimeout(t);t=0;btn.classList.remove("arm");btn.textContent=base;fn();return}btn.classList.add("arm");btn.textContent=label;t=setTimeout(()=>{t=0;btn.classList.remove("arm");btn.textContent=base},3000)}}
