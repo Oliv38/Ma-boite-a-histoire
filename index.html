@@ -51,6 +51,9 @@ header{padding-right:60px}
 .logo{width:60px;height:60px;flex:none}
 h1{font-family:var(--display);font-weight:700;letter-spacing:-.01em;font-variation-settings:"SOFT" 100,"opsz" 72;font-size:clamp(1.7rem,5vw,2.4rem);line-height:1;margin:0;color:var(--lamp);text-wrap:balance}
 .sub{color:var(--muted);margin:2px 0 0;font-size:.95rem}
+.tabs[hidden]{display:none}
+#v-lib{margin-top:24px}
+.tabs:not([hidden])~#v-lib{margin-top:0}
 .tabs{display:flex;gap:6px;margin:34px 0 24px;background:var(--night-2);padding:5px;border-radius:999px;width:max-content;max-width:100%}
 .tab{font:700 1rem var(--display);border:0;background:transparent;color:var(--muted);padding:8px 18px;border-radius:999px;cursor:pointer}
 .tab[aria-selected="true"]{background:var(--lamp);color:var(--night)}
@@ -302,6 +305,8 @@ html:has(.settings:not([hidden])),body:has(.settings:not([hidden])){overflow:hid
  .shuffle{top:calc(env(safe-area-inset-top,0px) + 10px);width:42px;height:42px}
  .shuffle.soiree{right:calc(max(16px,env(safe-area-inset-right,0px)) + 54px)}
  .tabs{margin:12px 0 10px}
+ #v-lib{margin-top:10px}
+ .tabs:not([hidden])~#v-lib{margin-top:0}
  .tab{padding:6px 14px;font-size:.92rem}
  .grid{grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:10px}
  .dial{padding-block:6px;max-width:640px}
@@ -357,7 +362,8 @@ html:has(.settings:not([hidden])),body:has(.settings:not([hidden])){overflow:hid
 
   </header>
 
-  <div class="tabs" role="tablist">
+  <!-- Bascule masquée (v165) : retirer l'attribut hidden pour remettre « Inventer une histoire » -->
+  <div class="tabs" role="tablist" hidden>
     <button class="tab" role="tab" id="t-lib" aria-selected="true">Bibliothèque</button>
     <button class="tab" role="tab" id="t-new" aria-selected="false" disabled aria-disabled="true" title="Bientôt disponible">Inventer une histoire <span class="prem soon-badge">Bientôt disponible</span></button>
   </div>
@@ -1376,7 +1382,7 @@ $("dlall").onclick=async()=>{
 };
 
 /* Réglages : triple toucher sur le logo */
-const APP_VERSION="164";
+const APP_VERSION="165";
 let logoTaps=[];
 document.querySelector(".logo").addEventListener("click",()=>{const t=Date.now();logoTaps=logoTaps.filter(x=>t-x<800);logoTaps.push(t);if(logoTaps.length>=3){logoTaps=[];openSettings()}});
 function arm(btn,label,fn){let t=0;const base=btn.textContent;btn.onclick=()=>{if(t){clearTimeout(t);t=0;btn.classList.remove("arm");btn.textContent=base;fn();return}btn.classList.add("arm");btn.textContent=label;t=setTimeout(()=>{t=0;btn.classList.remove("arm");btn.textContent=base},3000)}}
