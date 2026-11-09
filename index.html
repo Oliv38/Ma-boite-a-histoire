@@ -202,9 +202,8 @@ body.sheet-open .dock{z-index:8}
 .player.ended .pbtn{display:none}
 .p-end button{position:relative;flex:none;border:0;border-radius:50%;cursor:pointer;display:grid;place-items:center;padding:0}
 .p-end svg{fill:none;stroke:currentColor;stroke-linecap:round;stroke-linejoin:round}
-#replay{width:88px;height:88px;background:var(--lamp);color:var(--night);box-shadow:0 0 0 10px color-mix(in srgb,var(--lamp) 12%,transparent)}
-#replay svg{width:44px;height:44px;stroke-width:2.4}
-#replay .rp-tri{fill:currentColor;stroke-width:1.2}
+#replay{width:72px;height:72px;background:var(--lamp);color:var(--night)}
+#replay svg{width:32px;height:32px;stroke-width:2.4}
 #another{width:60px;height:60px;background:color-mix(in srgb,var(--moon) 10%,transparent);color:var(--lamp-soft)}
 #another>svg{width:24px;height:24px;stroke-width:2.4}
 #another .nx-tri{fill:currentColor;stroke-width:1.2}
@@ -477,7 +476,7 @@ html:has(.settings:not([hidden])),body:has(.settings:not([hidden])){overflow:hid
     <p class="ptitle" id="ptitle">—</p>
     <p class="pstat" id="pstat"></p>
     <button class="pbtn" id="play" aria-label="Lecture"><svg viewBox="0 0 24 24" id="pico"><path d="M7 4v16l13-8z"/></svg></button>
-    <div class="p-end" id="pend"><button id="replay" type="button" aria-label="Réécouter cette histoire"><svg viewBox="0 0 24 24" aria-hidden="true"><path class="rp-ring" d="M20 12a8 8 0 1 1-2.4-5.7"/><path class="rp-ring" d="M20.2 3.8v4.6h-4.6"/><path class="rp-tri" d="M10.3 8.6v6.8l5.4-3.4z"/></svg></button><button id="another" type="button" aria-label="Lire une autre histoire au hasard"><svg viewBox="0 0 24 24" aria-hidden="true"><path class="nx-tri" d="M6 5.5v13l9.5-6.5z"/><path class="nx-bar" d="M18.5 5.5v13"/></svg><span class="sh-badge" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M3 7h3.5c2 0 3.2.9 4.4 2.6l2.2 3.8c1.2 1.7 2.4 2.6 4.4 2.6H21M3 17h3.5c2 0 3.2-.9 4.4-2.6M13.1 9.6c1.2-1.7 2.4-2.6 4.4-2.6H21M18 4l3 3-3 3M18 14l3 3-3 3"/></svg></span></button></div>
+    <div class="p-end" id="pend"><button id="replay" type="button" aria-label="Réécouter cette histoire"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19.5 12a7.5 7.5 0 1 1-2.2-5.3M19.5 4.5v4h-4"/></svg></button><button id="another" type="button" aria-label="Lire une autre histoire au hasard"><svg viewBox="0 0 24 24" aria-hidden="true"><path class="nx-tri" d="M6 5.5v13l9.5-6.5z"/><path class="nx-bar" d="M18.5 5.5v13"/></svg><span class="sh-badge" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M3 7h3.5c2 0 3.2.9 4.4 2.6l2.2 3.8c1.2 1.7 2.4 2.6 4.4 2.6H21M3 17h3.5c2 0 3.2-.9 4.4-2.6M13.1 9.6c1.2-1.7 2.4-2.6 4.4-2.6H21M18 4l3 3-3 3M18 14l3 3-3 3"/></svg></span></button></div>
   </div>
   <div class="p-bottom">
     <div class="bar"><i id="bar"></i></div>
@@ -1382,7 +1381,7 @@ $("dlall").onclick=async()=>{
 };
 
 /* Réglages : triple toucher sur le logo */
-const APP_VERSION="165";
+const APP_VERSION="166";
 let logoTaps=[];
 document.querySelector(".logo").addEventListener("click",()=>{const t=Date.now();logoTaps=logoTaps.filter(x=>t-x<800);logoTaps.push(t);if(logoTaps.length>=3){logoTaps=[];openSettings()}});
 function arm(btn,label,fn){let t=0;const base=btn.textContent;btn.onclick=()=>{if(t){clearTimeout(t);t=0;btn.classList.remove("arm");btn.textContent=base;fn();return}btn.classList.add("arm");btn.textContent=label;t=setTimeout(()=>{t=0;btn.classList.remove("arm");btn.textContent=base},3000)}}
