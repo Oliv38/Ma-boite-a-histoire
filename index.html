@@ -194,13 +194,19 @@ body.sheet-open .dock{z-index:8}
 .pstat:not(.err){display:none}
 .pbtn{width:88px;height:88px;flex:none;border-radius:50%;border:0;background:var(--lamp);color:var(--night);cursor:pointer;display:grid;place-items:center;margin-top:22px;box-shadow:0 0 0 10px color-mix(in srgb,var(--lamp) 12%,transparent)}
 .pbtn svg{width:36px;height:36px;fill:currentColor}
-.p-end{display:none;flex-direction:row;justify-content:center;gap:22px;margin-top:22px}
+.p-end{display:none;flex-direction:row;align-items:center;justify-content:center;gap:26px;margin-top:22px}
 .player.ended .p-end{display:flex}
 .player.ended .pbtn{display:none}
-.p-end button{width:76px;height:76px;flex:none;border:0;border-radius:50%;cursor:pointer;display:grid;place-items:center;padding:0}
-.p-end svg{width:32px;height:32px;fill:none;stroke:currentColor;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
-#replay{background:var(--lamp);color:var(--night);box-shadow:0 0 0 8px color-mix(in srgb,var(--lamp) 12%,transparent)}
-#another{background:color-mix(in srgb,var(--moon) 12%,transparent);color:var(--lamp-soft)}
+.p-end button{position:relative;flex:none;border:0;border-radius:50%;cursor:pointer;display:grid;place-items:center;padding:0}
+.p-end svg{fill:none;stroke:currentColor;stroke-linecap:round;stroke-linejoin:round}
+#replay{width:88px;height:88px;background:var(--lamp);color:var(--night);box-shadow:0 0 0 10px color-mix(in srgb,var(--lamp) 12%,transparent)}
+#replay svg{width:44px;height:44px;stroke-width:2.4}
+#replay .rp-tri{fill:currentColor;stroke-width:1.2}
+#another{width:60px;height:60px;background:color-mix(in srgb,var(--moon) 10%,transparent);color:var(--lamp-soft)}
+#another>svg{width:24px;height:24px;stroke-width:2.4}
+#another .nx-tri{fill:currentColor;stroke-width:1.2}
+#another .sh-badge{right:-2px;bottom:-2px}
+#replay:active,#another:active{transform:scale(.95)}
 .p-bottom{max-width:520px;width:100%;margin:0 auto;display:grid;gap:10px}
 .bar{height:8px;position:relative;z-index:3;touch-action:none;cursor:pointer;background:color-mix(in srgb,var(--moon) 10%,transparent);border-radius:6px}
 .bar::before{content:"";position:absolute;left:0;right:0;top:-18px;bottom:-18px}
@@ -465,7 +471,7 @@ html:has(.settings:not([hidden])),body:has(.settings:not([hidden])){overflow:hid
     <p class="ptitle" id="ptitle">—</p>
     <p class="pstat" id="pstat"></p>
     <button class="pbtn" id="play" aria-label="Lecture"><svg viewBox="0 0 24 24" id="pico"><path d="M7 4v16l13-8z"/></svg></button>
-    <div class="p-end" id="pend"><button id="replay" type="button" aria-label="Réécouter cette histoire"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12a8 8 0 1 0 2.6-5.9"/><path d="M4 4v4.5h4.5"/></svg></button><button id="another" type="button" aria-label="Une autre histoire au hasard"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 7h3.5c4 0 5 10 9 10H21M3 17h3.5c1.6 0 2.7-1.6 3.6-3.4M13.9 10.4C14.8 8.6 15.4 7 17.5 7H21"/><path d="M18.5 4.5L21 7l-2.5 2.5M18.5 14.5L21 17l-2.5 2.5"/></svg></button></div>
+    <div class="p-end" id="pend"><button id="replay" type="button" aria-label="Réécouter cette histoire"><svg viewBox="0 0 24 24" aria-hidden="true"><path class="rp-ring" d="M20 12a8 8 0 1 1-2.4-5.7"/><path class="rp-ring" d="M20.2 3.8v4.6h-4.6"/><path class="rp-tri" d="M10.3 8.6v6.8l5.4-3.4z"/></svg></button><button id="another" type="button" aria-label="Lire une autre histoire au hasard"><svg viewBox="0 0 24 24" aria-hidden="true"><path class="nx-tri" d="M6 5.5v13l9.5-6.5z"/><path class="nx-bar" d="M18.5 5.5v13"/></svg><span class="sh-badge" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M3 7h3.5c2 0 3.2.9 4.4 2.6l2.2 3.8c1.2 1.7 2.4 2.6 4.4 2.6H21M3 17h3.5c2 0 3.2-.9 4.4-2.6M13.1 9.6c1.2-1.7 2.4-2.6 4.4-2.6H21M18 4l3 3-3 3M18 14l3 3-3 3"/></svg></span></button></div>
   </div>
   <div class="p-bottom">
     <div class="bar"><i id="bar"></i></div>
@@ -1370,7 +1376,7 @@ $("dlall").onclick=async()=>{
 };
 
 /* Réglages : triple toucher sur le logo */
-const APP_VERSION="162";
+const APP_VERSION="163";
 let logoTaps=[];
 document.querySelector(".logo").addEventListener("click",()=>{const t=Date.now();logoTaps=logoTaps.filter(x=>t-x<800);logoTaps.push(t);if(logoTaps.length>=3){logoTaps=[];openSettings()}});
 function arm(btn,label,fn){let t=0;const base=btn.textContent;btn.onclick=()=>{if(t){clearTimeout(t);t=0;btn.classList.remove("arm");btn.textContent=base;fn();return}btn.classList.add("arm");btn.textContent=label;t=setTimeout(()=>{t=0;btn.classList.remove("arm");btn.textContent=base},3000)}}
