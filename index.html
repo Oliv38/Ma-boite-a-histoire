@@ -123,6 +123,11 @@ button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid 
 .herobtn{--icbg:var(--night)}
 .herobtn.on{--icbg:color-mix(in srgb,var(--lamp) 26%,var(--night))}
 .herobtn .hemo{font-size:1.45rem;line-height:1}
+/* Portraits des héros (filtre) : heros/<id>.webp, repli sur l'emoji si absent */
+.hpic{display:block;object-fit:cover;border-radius:50%;pointer-events:none;box-shadow:0 0 0 2px color-mix(in srgb,var(--lamp) 35%,transparent)}
+.hs-item .hpic{width:64px;height:64px}
+.hs-grid.big .hs-item .hpic{width:96px;height:96px}
+.herobtn .hpic{width:40px;height:40px;border-radius:50%}
 #pemoji .hemo{font-size:min(24vw,104px);line-height:1}
 .p-moon{--icbg:color-mix(in srgb,var(--lamp) 22%,var(--night-2))}
 .card h3{font:700 1.05rem/1.2 var(--display);margin:0 0 3px;text-wrap:balance}
@@ -311,6 +316,7 @@ html:has(.settings:not([hidden])),body:has(.settings:not([hidden])){overflow:hid
  .grid{grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:10px}
  .dial{padding-block:6px;max-width:640px}
  .herobtn{width:40px;height:40px}
+ .herobtn .hpic{width:32px;height:32px}
  .seg-item{padding:7px 4px;font-size:.92rem}
  .herosheet{padding-block:8px 2px}
  .hs-in{max-width:980px}
@@ -494,6 +500,8 @@ html:has(.settings:not([hidden])),body:has(.settings:not([hidden])){overflow:hid
 
 <script>
 /* ---------- Données ---------- */
+const HEROPIC=new Set(["lapin","dragon","fee","robot"]);
+const hpic=id=>HEROPIC.has(id)?`<img class="hpic" src="heros/${id}.webp" alt="" decoding="async">`:hico(id);
 const hico=id=>C[id]?`<span class="hemo">${C[id].e}</span>`:"";
 const STAR_ICON='<span class="hemo">🧸</span>';
 const CHARS=[
@@ -1058,7 +1066,7 @@ function renderHeroes(){
  const all=HERO_ORDER.slice().sort((a,b)=>nb(a.id)-nb(b.id));
  applyHcols();
  $("hsgrid").replaceChildren(...all.map(c=>{const b=document.createElement("button");b.className="hs-item";b.setAttribute("aria-pressed",heroes.has(c.id));
-  b.innerHTML="<span></span><span></span>";b.firstChild.innerHTML=hico(c.id);b.lastChild.textContent=c.id?shortName(c):"Tous";b.title=c.n;
+  b.innerHTML="<span></span><span></span>";b.firstChild.innerHTML=hpic(c.id);b.lastChild.textContent=c.id?shortName(c):"Tous";b.title=c.n;
   b.onclick=()=>{heroes.has(c.id)?heroes.delete(c.id):heroes.add(c.id);b.setAttribute("aria-pressed",heroes.has(c.id));syncHeroBtn();renderLib()};return b}));
 }
 function renderThemes(){
@@ -1067,7 +1075,7 @@ function renderThemes(){
 }
 function syncHeroBtn(){
  const ids=[...heroes],n=ids.length+themes.size;
- $("heroico").innerHTML=ids.length?hico(ids[0]):STAR_ICON;
+ $("heroico").innerHTML=ids.length?hpic(ids[0]):STAR_ICON;
  $("herocount").textContent=n>1?n:"";$("herocount").hidden=n<2;
  $("herobtn").classList.toggle("on",n>0);
  $("herobtn").setAttribute("aria-label","Filtres : "+(n?[...ids.map(i=>C[i].n),...THEMES.filter(t=>themes.has(t[0])).map(t=>t[1])].join(", "):"aucun"));
@@ -1382,7 +1390,7 @@ $("dlall").onclick=async()=>{
 };
 
 /* Réglages : triple toucher sur le logo */
-const APP_VERSION="172";
+const APP_VERSION="173";
 let logoTaps=[];
 document.querySelector(".logo").addEventListener("click",()=>{const t=Date.now();logoTaps=logoTaps.filter(x=>t-x<800);logoTaps.push(t);if(logoTaps.length>=3){logoTaps=[];openSettings()}});
 function arm(btn,label,fn){let t=0;const base=btn.textContent;btn.onclick=()=>{if(t){clearTimeout(t);t=0;btn.classList.remove("arm");btn.textContent=base;fn();return}btn.classList.add("arm");btn.textContent=label;t=setTimeout(()=>{t=0;btn.classList.remove("arm");btn.textContent=base},3000)}}
