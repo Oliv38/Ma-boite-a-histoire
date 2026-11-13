@@ -501,6 +501,9 @@ html:has(.settings:not([hidden])),body:has(.settings:not([hidden])){overflow:hid
   </div>
 </div>
 
+<!-- Compteur de visites GoatCounter (sans cookie). -->
+<script data-goatcounter="https://storybox.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+
 <script>
 /* ---------- Données ---------- */
 const HEROPIC=new Set(["lapin","dragon","fee","robot","pirate","chevalier","princesse","sorciere","ours","renard","licorne","astronaute","dino","lutin","souris","ogre","escargot","clown","fantome","chien","vache","panda","tigre","cochon","grenouille","singe","poussin","avion","coccinelle","ecureuil","train","chat","hibou","baleine"]);
@@ -1393,7 +1396,7 @@ $("dlall").onclick=async()=>{
 };
 
 /* Réglages : triple toucher sur le logo */
-const APP_VERSION="179";
+const APP_VERSION="180";
 let logoTaps=[];
 document.querySelector(".logo").addEventListener("click",()=>{const t=Date.now();logoTaps=logoTaps.filter(x=>t-x<800);logoTaps.push(t);if(logoTaps.length>=3){logoTaps=[];openSettings()}});
 function arm(btn,label,fn){let t=0;const base=btn.textContent;btn.onclick=()=>{if(t){clearTimeout(t);t=0;btn.classList.remove("arm");btn.textContent=base;fn();return}btn.classList.add("arm");btn.textContent=label;t=setTimeout(()=>{t=0;btn.classList.remove("arm");btn.textContent=base},3000)}}
