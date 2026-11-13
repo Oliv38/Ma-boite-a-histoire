@@ -11,8 +11,8 @@ const path = require("path");
 const vm = require("vm");
 const { execFileSync } = require("child_process");
 
-const HEROS_ATTENDUS = 34;
-const HISTOIRES_ATTENDUES = 204;
+const HEROS_ATTENDUS = 38;
+const HISTOIRES_ATTENDUES = 228;
 
 const args = process.argv.slice(2);
 const opt = n => { const i = args.indexOf(n); return i >= 0 ? args[i + 1] : null; };
