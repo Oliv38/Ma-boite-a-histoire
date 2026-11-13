@@ -1,0 +1,22 @@
+name: Contrôles
+
+on:
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  controles:
+    name: Contrôles automatiques
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: lts/*
+      - name: Lancer scripts/check.js
+        run: node scripts/check.js --base "origin/${{ github.base_ref }}"
